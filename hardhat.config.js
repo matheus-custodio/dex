@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 require("@nomiclabs/hardhat-waffle");
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -18,4 +19,12 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.4",
+  paths: {
+      artifacts: '.src/artifacts',
+  },
+  networks: {
+    hardhat: {
+      chainId: 1337
+    },
+  },
 };
