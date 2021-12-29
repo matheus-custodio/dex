@@ -3,9 +3,10 @@ const hre = require("hardhat");
 async function main() {
 
   const Wallet = await hre.ethers.getContractFactory("Wallet");
-  const wallet = await Wallet.deploy("Deploying Wallet!");
   const Token = await hre.ethers.getContractFactory("Token");
-  const token = await Token.deploy("Deploying Token!");
+  
+  const wallet = await Wallet.deploy();
+  const token = await Token.deploy();
 
 
   await wallet.deployed();
