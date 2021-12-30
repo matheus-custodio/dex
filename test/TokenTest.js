@@ -2,8 +2,9 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
 describe('Token contract', () => {
-  let Token; let token; let
-    owner;
+  let Token;
+  let token;
+  let owner;
   beforeEach(async () => {
     Token = await ethers.getContractFactory('Token');
     token = await Token.deploy();

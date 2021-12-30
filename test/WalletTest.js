@@ -1,10 +1,13 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
-describe('Wallet contract', function() {
-  let Wallet; let wallet; let Token; let token; let
-    owner;
-  beforeEach(async function() {
+describe('Wallet contract', () => {
+  let Wallet;
+  let wallet;
+  let Token;
+  let token;
+  let owner;
+  beforeEach(async () => {
     Token = await ethers.getContractFactory('Token');
     Wallet = await ethers.getContractFactory('Wallet');
 
@@ -13,7 +16,7 @@ describe('Wallet contract', function() {
     [owner] = await ethers.getSigners();
   });
 
-  it('Should deposit 100', async function() {
+  it('Should deposit 100', async () => {
     const tokenSymbol = ethers.utils.formatBytes32String(await token.symbol());
     await wallet.addToken(tokenSymbol, token.address);
     await token.approve(wallet.address, 500);
