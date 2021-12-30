@@ -7,4 +7,4 @@ contract Token is ERC20 {
     constructor() ERC20("Token", "TKN") {
         _mint(msg.sender, 1000);
     }
-} 
+}
