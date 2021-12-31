@@ -17,6 +17,16 @@
     "mocha/no-skipped-tests": "error",
     "mocha/no-exclusive-tests": "error",
     "mocha/no-mocha-arrows": "off",
-    "no-console":"off"
+    "no-console":"off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ]
   }
 }
