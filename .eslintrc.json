@@ -3,9 +3,16 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "plugin:mocha/recommended","next/core-web-vitals"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:mocha/recommended",
+    "next/core-web-vitals",
+    "airbnb-typescript"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": "./tsconfig.json",
     "ecmaFeatures": {
       "jsx": true
     },
@@ -14,10 +21,12 @@
   },
   "plugins": ["react", "@typescript-eslint", "mocha"],
   "rules": {
+    "indent": "off",
+    "@typescript-eslint/indent": ["error"],
     "mocha/no-skipped-tests": "error",
     "mocha/no-exclusive-tests": "error",
     "mocha/no-mocha-arrows": "off",
-    "no-console":"off",
+    "no-console": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -27,6 +36,6 @@
         "ts": "never",
         "tsx": "never"
       }
-   ]
+    ]
   }
 }

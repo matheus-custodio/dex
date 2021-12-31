@@ -15,6 +15,7 @@
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "chai-as-promised": "^7.1.1",
+    "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-plugin-mocha": "^10.0.3",
     "eth-gas-reporter": "^0.2.23",
     "ethereum-waffle": "^3.4.0",
