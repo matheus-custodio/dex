@@ -1,24 +1,11 @@
-/* eslint-disable import/no-import-module-exports */
-/* eslint-disable no-undef */
-import { task } from 'hardhat/config';
+import { HardhatUserConfig } from 'hardhat/types';
+import 'tsconfig-paths/register';
 import '@typechain/hardhat';
-import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
+import 'solidity-coverage';
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task('accounts', 'Prints the list of accounts', async (args, hre) => {
-  const accounts = await hre.ethers.getSigners();
-  accounts.forEach(accounts.entries);
-});
-
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
-
-/**
- * @type import('hardhat/config').HardhatUserConfig
- */
-export default {
+const config: HardhatUserConfig = {
+  defaultNetwork: 'hardhat',
   solidity: '0.8.4',
   paths: {
     artifacts: 'src/artifacts',
@@ -28,4 +15,14 @@ export default {
       chainId: 1337,
     },
   },
+  /*
+  mocha: {
+    reporter: 'eth-gas-reporter',
+    reporterOptions: {
+      token: 'BNB',
+      gasPriceApi: 'Binance',
+    },
+  }, */
 };
+
+export default config;

@@ -10,22 +10,23 @@ contract Dex is Wallet {
         SELL
     }
     struct Order {
-        uint id;
+        uint256 id;
         address trader;
         Type orderType;
         bytes32 ticker;
-        uint amount;
-        uint price;
+        uint256 amount;
+        uint256 price;
     }
 
-    mapping(bytes32 => mapping(uint => Order[])) orderBook;
+    mapping(bytes32 => mapping(uint256 => Order[])) public orderBook;
 
-    function getOrderBook(bytes32 ticker, Type orderType) view public returns(Order[] memory){
-        return orderBook[ticker][uint(orderType)];
+    function getOrderBook(bytes32 ticker, Type orderType)
+        public
+        view
+        returns (Order[] memory)
+    {
+        return orderBook[ticker][uint256(orderType)];
     }
 
-    function createLimitOrder() public{
-
-    }
-
+    function createLimitOrder() public {}
 }

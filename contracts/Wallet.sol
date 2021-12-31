@@ -31,10 +31,7 @@ contract Wallet is Ownable {
         tokenList.push(ticker);
     }
 
-    function deposit(uint256 amount, bytes32 ticker)
-        external
-        tokenExist(ticker)
-    {
+    function deposit(uint256 amount, bytes32 ticker) external tokenExist(ticker) {
         IERC20(tokenMapping[ticker].tokenAddress).transferFrom(
             msg.sender,
             address(this),
