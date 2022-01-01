@@ -21,7 +21,6 @@
   },
   "plugins": ["react", "@typescript-eslint", "mocha"],
   "rules": {
-    "indent": "off",
     "@typescript-eslint/indent": ["error"],
     "mocha/no-skipped-tests": "error",
     "mocha/no-exclusive-tests": "error",

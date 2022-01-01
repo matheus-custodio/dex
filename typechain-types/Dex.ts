@@ -47,10 +47,9 @@ export interface DexInterface extends utils.Interface {
     "GetOrderBook(bytes32,uint8)": FunctionFragment;
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
-    "c_0x908a12f6(bytes32)": FunctionFragment;
-    "c_0xd01e15ec(bytes32)": FunctionFragment;
-    "createLimitOrder()": FunctionFragment;
+    "createLimitOrder(bytes32,uint256,uint256)": FunctionFragment;
     "deposit(uint256,bytes32)": FunctionFragment;
+    "getUserBalance(bytes32)": FunctionFragment;
     "orderBook(bytes32,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -73,20 +72,16 @@ export interface DexInterface extends utils.Interface {
     values: [string, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "c_0x908a12f6",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0xd01e15ec",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "createLimitOrder",
-    values?: undefined
+    values: [BytesLike, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
     values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserBalance",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "orderBook",
@@ -121,18 +116,14 @@ export interface DexInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "addToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "c_0x908a12f6",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0xd01e15ec",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "createLimitOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserBalance",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "orderBook", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -210,22 +201,20 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    c_0x908a12f6(
-      c__0x908a12f6: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    c_0xd01e15ec(
-      c__0xd01e15ec: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
     createLimitOrder(
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     deposit(
       amount: BigNumberish,
+      ticker: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    getUserBalance(
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -289,22 +278,20 @@ export interface Dex extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  c_0x908a12f6(
-    c__0x908a12f6: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  c_0xd01e15ec(
-    c__0xd01e15ec: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
   createLimitOrder(
+    ticker: BytesLike,
+    amount: BigNumberish,
+    price: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   deposit(
     amount: BigNumberish,
+    ticker: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  getUserBalance(
     ticker: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -368,23 +355,20 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    c_0x908a12f6(
-      c__0x908a12f6: BytesLike,
+    createLimitOrder(
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    c_0xd01e15ec(
-      c__0xd01e15ec: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createLimitOrder(overrides?: CallOverrides): Promise<void>;
 
     deposit(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getUserBalance(ticker: BytesLike, overrides?: CallOverrides): Promise<void>;
 
     orderBook(
       arg0: BytesLike,
@@ -455,22 +439,20 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    c_0x908a12f6(
-      c__0x908a12f6: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    c_0xd01e15ec(
-      c__0xd01e15ec: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     createLimitOrder(
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     deposit(
       amount: BigNumberish,
+      ticker: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    getUserBalance(
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -529,22 +511,20 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    c_0x908a12f6(
-      c__0x908a12f6: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0xd01e15ec(
-      c__0xd01e15ec: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     createLimitOrder(
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     deposit(
       amount: BigNumberish,
+      ticker: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getUserBalance(
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
