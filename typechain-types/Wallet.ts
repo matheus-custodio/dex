@@ -9,6 +9,7 @@ import {
   CallOverrides,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -21,13 +22,15 @@ export interface WalletInterface extends utils.Interface {
   functions: {
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
-    "deposit(uint256,bytes32)": FunctionFragment;
+    "deposit()": FunctionFragment;
+    "depositToken(uint256,bytes32)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "tokenList(uint256)": FunctionFragment;
     "tokenMapping(bytes32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "withdraw(uint256,bytes32)": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
+    "withdrawToken(uint256,bytes32)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -38,8 +41,9 @@ export interface WalletInterface extends utils.Interface {
     functionFragment: "balances",
     values: [string, BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "deposit",
+    functionFragment: "depositToken",
     values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -61,12 +65,20 @@ export interface WalletInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawToken",
     values: [BigNumberish, BytesLike]
   ): string;
 
   decodeFunctionResult(functionFragment: "addToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "depositToken",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -82,6 +94,10 @@ export interface WalletInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawToken",
+    data: BytesLike
+  ): Result;
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
@@ -138,6 +154,10 @@ export interface Wallet extends BaseContract {
     ): Promise<[BigNumber]>;
 
     deposit(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -163,6 +183,11 @@ export interface Wallet extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    withdrawToken(
+      amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -181,6 +206,10 @@ export interface Wallet extends BaseContract {
   ): Promise<BigNumber>;
 
   deposit(
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  depositToken(
     amount: BigNumberish,
     ticker: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -206,6 +235,11 @@ export interface Wallet extends BaseContract {
 
   withdraw(
     amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawToken(
+    amount: BigNumberish,
     ticker: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -223,7 +257,9 @@ export interface Wallet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    deposit(
+    deposit(overrides?: CallOverrides): Promise<void>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: CallOverrides
@@ -245,7 +281,9 @@ export interface Wallet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    withdraw(
+    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    withdrawToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: CallOverrides
@@ -277,6 +315,10 @@ export interface Wallet extends BaseContract {
     ): Promise<BigNumber>;
 
     deposit(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -305,6 +347,11 @@ export interface Wallet extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    withdrawToken(
+      amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -324,6 +371,10 @@ export interface Wallet extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     deposit(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -351,6 +402,11 @@ export interface Wallet extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }

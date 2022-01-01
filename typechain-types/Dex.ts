@@ -9,6 +9,7 @@ import {
   CallOverrides,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -47,16 +48,19 @@ export interface DexInterface extends utils.Interface {
     "GetOrderBook(bytes32,uint8)": FunctionFragment;
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
-    "createLimitOrder(bytes32,uint256,uint256)": FunctionFragment;
-    "deposit(uint256,bytes32)": FunctionFragment;
-    "getUserBalance(bytes32)": FunctionFragment;
+    "createLimitOrder(uint8,bytes32,uint256,uint256)": FunctionFragment;
+    "createMarketOrder(uint8,bytes32,uint256,uint256)": FunctionFragment;
+    "deposit()": FunctionFragment;
+    "depositToken(uint256,bytes32)": FunctionFragment;
+    "nextOrderId()": FunctionFragment;
     "orderBook(bytes32,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "tokenList(uint256)": FunctionFragment;
     "tokenMapping(bytes32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "withdraw(uint256,bytes32)": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
+    "withdrawToken(uint256,bytes32)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -73,15 +77,20 @@ export interface DexInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createLimitOrder",
-    values: [BytesLike, BigNumberish, BigNumberish]
+    values: [BigNumberish, BytesLike, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "deposit",
+    functionFragment: "createMarketOrder",
+    values: [BigNumberish, BytesLike, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "depositToken",
     values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "getUserBalance",
-    values: [BytesLike]
+    functionFragment: "nextOrderId",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "orderBook",
@@ -106,6 +115,10 @@ export interface DexInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawToken",
     values: [BigNumberish, BytesLike]
   ): string;
 
@@ -119,9 +132,17 @@ export interface DexInterface extends utils.Interface {
     functionFragment: "createLimitOrder",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "createMarketOrder",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getUserBalance",
+    functionFragment: "depositToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "nextOrderId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "orderBook", data: BytesLike): Result;
@@ -140,6 +161,10 @@ export interface DexInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawToken",
+    data: BytesLike
+  ): Result;
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
@@ -202,6 +227,15 @@ export interface Dex extends BaseContract {
     ): Promise<[BigNumber]>;
 
     createLimitOrder(
+      orderType: BigNumberish,
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    createMarketOrder(
+      orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
       price: BigNumberish,
@@ -209,15 +243,16 @@ export interface Dex extends BaseContract {
     ): Promise<ContractTransaction>;
 
     deposit(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    getUserBalance(
-      ticker: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    nextOrderId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     orderBook(
       arg0: BytesLike,
@@ -255,6 +290,11 @@ export interface Dex extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    withdrawToken(
+      amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -279,6 +319,15 @@ export interface Dex extends BaseContract {
   ): Promise<BigNumber>;
 
   createLimitOrder(
+    orderType: BigNumberish,
+    ticker: BytesLike,
+    amount: BigNumberish,
+    price: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  createMarketOrder(
+    orderType: BigNumberish,
     ticker: BytesLike,
     amount: BigNumberish,
     price: BigNumberish,
@@ -286,15 +335,16 @@ export interface Dex extends BaseContract {
   ): Promise<ContractTransaction>;
 
   deposit(
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  depositToken(
     amount: BigNumberish,
     ticker: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  getUserBalance(
-    ticker: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
 
   orderBook(
     arg0: BytesLike,
@@ -332,6 +382,11 @@ export interface Dex extends BaseContract {
 
   withdraw(
     amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawToken(
+    amount: BigNumberish,
     ticker: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -356,19 +411,30 @@ export interface Dex extends BaseContract {
     ): Promise<BigNumber>;
 
     createLimitOrder(
+      orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
       price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    deposit(
+    createMarketOrder(
+      orderType: BigNumberish,
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    deposit(overrides?: CallOverrides): Promise<void>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    getUserBalance(ticker: BytesLike, overrides?: CallOverrides): Promise<void>;
+    nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
 
     orderBook(
       arg0: BytesLike,
@@ -402,7 +468,9 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    withdraw(
+    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    withdrawToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: CallOverrides
@@ -440,6 +508,15 @@ export interface Dex extends BaseContract {
     ): Promise<BigNumber>;
 
     createLimitOrder(
+      orderType: BigNumberish,
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    createMarketOrder(
+      orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
       price: BigNumberish,
@@ -447,15 +524,16 @@ export interface Dex extends BaseContract {
     ): Promise<BigNumber>;
 
     deposit(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    getUserBalance(
-      ticker: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
 
     orderBook(
       arg0: BytesLike,
@@ -487,6 +565,11 @@ export interface Dex extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    withdrawToken(
+      amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -512,6 +595,15 @@ export interface Dex extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createLimitOrder(
+      orderType: BigNumberish,
+      ticker: BytesLike,
+      amount: BigNumberish,
+      price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createMarketOrder(
+      orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
       price: BigNumberish,
@@ -519,15 +611,16 @@ export interface Dex extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     deposit(
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    depositToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    getUserBalance(
-      ticker: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    nextOrderId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     orderBook(
       arg0: BytesLike,
@@ -558,6 +651,11 @@ export interface Dex extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawToken(
       amount: BigNumberish,
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }

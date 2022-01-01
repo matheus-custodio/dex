@@ -5,6 +5,7 @@ pragma abicoder v2;
 import "./Wallet.sol";
 
 contract Dex is Wallet {
+    using SafeMath for uint256;
     enum Type {
         BUY,
         SELL
@@ -18,6 +19,8 @@ contract Dex is Wallet {
         uint256 price;
     }
 
+    uint256 public nextOrderId;
+
     mapping(bytes32 => mapping(uint256 => Order[])) public orderBook;
 
     function GetOrderBook(bytes32 ticker, Type orderType)
@@ -29,10 +32,45 @@ contract Dex is Wallet {
     }
 
     function createLimitOrder(
+        Type orderType,
         bytes32 ticker,
         uint256 amount,
         uint256 price
-    ) public {}
+    ) public tokenExist(ticker) {
+        if (orderType == Type.BUY) {
+            require(balances[msg.sender]["BNB"] >= amount.mul(price));
+        } else if (orderType == Type.SELL) {
+            require(balances[msg.sender][ticker] >= amount);
+        }
 
-    function getUserBalance(bytes32 ticker) public {}
+        Order[] storage orders = orderBook[ticker][uint8(orderType)];
+        orders.push(
+            Order(nextOrderId, msg.sender, orderType, ticker, amount, price)
+        );
+
+        uint256 i = orders.length > 0 ? orders.length - 1 : 0;
+
+        while (i > 0) {
+            if (
+                (orderType == Type.BUY &&
+                    orders[i - 1].price > orders[i].price) ||
+                (orderType == Type.SELL &&
+                    orders[i - 1].price < orders[i].price)
+            ) {
+                break;
+            }
+            Order memory orderToMove = orders[i - 1];
+            orders[i - 1] = orders[i];
+            orders[i] = orderToMove;
+            i--;
+        }
+        nextOrderId.add(1);
+    }
+
+    function createMarketOrder(
+        Type orderType,
+        bytes32 ticker,
+        uint256 amount,
+        uint256 price
+    ) public tokenExist(ticker) {}
 }

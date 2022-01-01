@@ -25,7 +25,7 @@ describe('Wallet contract', () => {
     await wallet.addToken(tokenSymbol, token.address);
   });
   it('Should not withdraw', async () => {
-    await expect(wallet.withdraw(100, tokenSymbol)).to.be.reverted;
+    await expect(wallet.withdrawToken(100, tokenSymbol)).to.be.reverted;
   });
   it('Should not be owner', async () => {
     await expect(wallet.connect(addr).addToken(tokenSymbol, token.address)).to
@@ -36,7 +36,7 @@ describe('Wallet contract', () => {
     let balanceOfToken: BigNumber;
     beforeEach(async () => {
       await token.approve(wallet.address, 500);
-      await wallet.deposit(100, tokenSymbol);
+      await wallet.depositToken(100, tokenSymbol);
       ownerBalance = await token.balanceOf(owner.address);
       balanceOfToken = await wallet.balances(owner.address, tokenSymbol);
     });
@@ -47,7 +47,7 @@ describe('Wallet contract', () => {
       expect(balanceOfToken.toNumber() === 100);
     });
     it('Should withdraw', async () => {
-      await wallet.withdraw(100, tokenSymbol);
+      await wallet.withdrawToken(100, tokenSymbol);
       ownerBalance = await token.balanceOf(owner.address);
       balanceOfToken = await wallet.balances(owner.address, tokenSymbol);
       expect(await token.totalSupply()).to.equal(ownerBalance);
