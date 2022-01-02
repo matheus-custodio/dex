@@ -49,7 +49,7 @@ export interface DexInterface extends utils.Interface {
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
     "createLimitOrder(uint8,bytes32,uint256,uint256)": FunctionFragment;
-    "createMarketOrder(uint8,bytes32,uint256,uint256)": FunctionFragment;
+    "createMarketOrder(uint8,bytes32,uint256)": FunctionFragment;
     "deposit()": FunctionFragment;
     "depositToken(uint256,bytes32)": FunctionFragment;
     "nextOrderId()": FunctionFragment;
@@ -81,7 +81,7 @@ export interface DexInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createMarketOrder",
-    values: [BigNumberish, BytesLike, BigNumberish, BigNumberish]
+    values: [BigNumberish, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(
@@ -238,7 +238,6 @@ export interface Dex extends BaseContract {
       orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
-      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -330,7 +329,6 @@ export interface Dex extends BaseContract {
     orderType: BigNumberish,
     ticker: BytesLike,
     amount: BigNumberish,
-    price: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -422,7 +420,6 @@ export interface Dex extends BaseContract {
       orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
-      price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -519,7 +516,6 @@ export interface Dex extends BaseContract {
       orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
-      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -606,7 +602,6 @@ export interface Dex extends BaseContract {
       orderType: BigNumberish,
       ticker: BytesLike,
       amount: BigNumberish,
-      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

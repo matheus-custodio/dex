@@ -70,7 +70,6 @@ contract Dex is Wallet {
     function createMarketOrder(
         Type orderType,
         bytes32 ticker,
-        uint256 amount,
-        uint256 price
+        uint256 amount
     ) public tokenExist(ticker) {}
 }
