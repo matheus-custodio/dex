@@ -25,6 +25,7 @@ export type OrderStruct = {
   ticker: BytesLike;
   amount: BigNumberish;
   price: BigNumberish;
+  filled: BigNumberish;
 };
 
 export type OrderStructOutput = [
@@ -32,6 +33,7 @@ export type OrderStructOutput = [
   string,
   number,
   string,
+  BigNumber,
   BigNumber,
   BigNumber
 ] & {
@@ -41,6 +43,7 @@ export type OrderStructOutput = [
   ticker: string;
   amount: BigNumber;
   price: BigNumber;
+  filled: BigNumber;
 };
 
 export interface DexInterface extends utils.Interface {
@@ -48,8 +51,6 @@ export interface DexInterface extends utils.Interface {
     "GetOrderBook(bytes32,uint8)": FunctionFragment;
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
-    "c_0xb68c73e2(bytes32)": FunctionFragment;
-    "c_0xbbb80185(bytes32)": FunctionFragment;
     "createLimitOrder(uint8,bytes32,uint256,uint256)": FunctionFragment;
     "createMarketOrder(uint8,bytes32,uint256)": FunctionFragment;
     "deposit()": FunctionFragment;
@@ -76,14 +77,6 @@ export interface DexInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "balances",
     values: [string, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0xb68c73e2",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0xbbb80185",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "createLimitOrder",
@@ -138,14 +131,6 @@ export interface DexInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "addToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0xb68c73e2",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0xbbb80185",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "createLimitOrder",
     data: BytesLike
@@ -244,16 +229,6 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    c_0xb68c73e2(
-      c__0xb68c73e2: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
     createLimitOrder(
       orderType: BigNumberish,
       ticker: BytesLike,
@@ -287,13 +262,14 @@ export interface Dex extends BaseContract {
       arg2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, string, number, string, BigNumber, BigNumber] & {
+      [BigNumber, string, number, string, BigNumber, BigNumber, BigNumber] & {
         id: BigNumber;
         trader: string;
         orderType: number;
         ticker: string;
         amount: BigNumber;
         price: BigNumber;
+        filled: BigNumber;
       }
     >;
 
@@ -345,16 +321,6 @@ export interface Dex extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  c_0xb68c73e2(
-    c__0xb68c73e2: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  c_0xbbb80185(
-    c__0xbbb80185: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
   createLimitOrder(
     orderType: BigNumberish,
     ticker: BytesLike,
@@ -388,13 +354,14 @@ export interface Dex extends BaseContract {
     arg2: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, string, number, string, BigNumber, BigNumber] & {
+    [BigNumber, string, number, string, BigNumber, BigNumber, BigNumber] & {
       id: BigNumber;
       trader: string;
       orderType: number;
       ticker: string;
       amount: BigNumber;
       price: BigNumber;
+      filled: BigNumber;
     }
   >;
 
@@ -446,16 +413,6 @@ export interface Dex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    c_0xb68c73e2(
-      c__0xb68c73e2: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     createLimitOrder(
       orderType: BigNumberish,
       ticker: BytesLike,
@@ -487,13 +444,14 @@ export interface Dex extends BaseContract {
       arg2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, string, number, string, BigNumber, BigNumber] & {
+      [BigNumber, string, number, string, BigNumber, BigNumber, BigNumber] & {
         id: BigNumber;
         trader: string;
         orderType: number;
         ticker: string;
         amount: BigNumber;
         price: BigNumber;
+        filled: BigNumber;
       }
     >;
 
@@ -549,16 +507,6 @@ export interface Dex extends BaseContract {
     balances(
       arg0: string,
       arg1: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    c_0xb68c73e2(
-      c__0xb68c73e2: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -645,16 +593,6 @@ export interface Dex extends BaseContract {
     balances(
       arg0: string,
       arg1: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0xb68c73e2(
-      c__0xb68c73e2: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

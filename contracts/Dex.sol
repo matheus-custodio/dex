@@ -17,6 +17,7 @@ contract Dex is Wallet {
         bytes32 ticker;
         uint256 amount;
         uint256 price;
+        uint256 filled;
     }
 
     uint256 public nextOrderId;
@@ -45,7 +46,7 @@ contract Dex is Wallet {
 
         Order[] storage orders = orderBook[ticker][uint8(orderType)];
         orders.push(
-            Order(nextOrderId, msg.sender, orderType, ticker, amount, price)
+            Order(nextOrderId, msg.sender, orderType, ticker, amount, price, 0)
         );
 
         uint256 i = orders.length > 0 ? orders.length - 1 : 0;
