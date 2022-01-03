@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ethers } from 'hardhat';
@@ -99,6 +100,7 @@ describe('Dex Test', () => {
       await dex.deposit({ value: 100 });
       await expect(dex.createMarketOrder(0, tokenSymbol, 2));
     });
+
     it('Should have enough tokens for sell order', async () => {
       const balance = await dex.balances(accounts[0].address, tokenSymbol);
 
@@ -109,11 +111,16 @@ describe('Dex Test', () => {
     });
     it('Should sell correctly', async () => {
       await dex.depositToken(2, tokenSymbol);
+      const balanceBefore = await dex.balances(
+        accounts[1].address,
+        tokenSymbol,
+      );
       await dex.connect(accounts[1]).createLimitOrder(0, tokenSymbol, 2, 2);
 
       await expect(dex.createMarketOrder(1, tokenSymbol, 2));
       assert(
-        (await dex.balances(accounts[1].address, tokenSymbol)).toNumber() === 2,
+        (await dex.balances(accounts[1].address, tokenSymbol)).toNumber() ===
+          balanceBefore.toNumber() + 2,
         'Buyer balance is wrong',
       );
       assert(
@@ -124,11 +131,14 @@ describe('Dex Test', () => {
     it('Sell orderBook should not be empty', async () => {
       let orderBook = await dex.GetOrderBook(tokenSymbol, 1);
       assert(orderBook.length === 0, 'Order book should be empty');
+      await token.transfer(accounts[1].address, 50);
+      await token.connect(accounts[1]).approve(dex.address, 50);
+      await dex.connect(accounts[1]).depositToken(50, tokenSymbol);
+      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 1);
+      await dex.connect(accounts[2]).createLimitOrder(1, tokenSymbol, 5, 2);
+      await dex.connect(accounts[3]).createLimitOrder(1, tokenSymbol, 5, 3);
 
-      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 300);
-      await dex.connect(accounts[2]).createLimitOrder(1, tokenSymbol, 5, 400);
-      await dex.connect(accounts[3]).createLimitOrder(1, tokenSymbol, 5, 500);
-
+      await dex.deposit({ value: 15 });
       await dex.createMarketOrder(0, tokenSymbol, 10);
 
       orderBook = await dex.GetOrderBook(tokenSymbol, 1);
@@ -139,17 +149,16 @@ describe('Dex Test', () => {
       let orderBook = await dex.GetOrderBook(tokenSymbol, 1);
       assert(orderBook.length === 0, 'Order book should be empty');
       await dex.deposit({ value: 100000 });
-      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 300);
-      await dex.connect(accounts[2]).createLimitOrder(1, tokenSymbol, 5, 400);
+      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 1);
+      await dex.connect(accounts[2]).createLimitOrder(1, tokenSymbol, 5, 2);
 
       const balanceBefore = await dex.balances(accounts[0].address, bnb);
       await dex.createMarketOrder(0, tokenSymbol, 10);
       const balanceAfter = await dex.balances(accounts[0].address, bnb);
 
       orderBook = await dex.GetOrderBook(tokenSymbol, 1);
-      expect(balanceBefore.toNumber() - 700).to.equal(balanceAfter.toNumber());
+      expect(balanceBefore.toNumber() - 15).to.equal(balanceAfter.toNumber());
       assert(orderBook.length === 0, 'Sell side should have 1 order');
-      assert(orderBook[0].filled === orderBook[0].amount);
     });
     it('Buy orderBook should be empty, and balance right', async () => {
       const orderBook = await dex.GetOrderBook(tokenSymbol, 1);
@@ -190,7 +199,8 @@ describe('Dex Test', () => {
       let orderBook = await dex.GetOrderBook(tokenSymbol, 1);
       assert(orderBook.length === 0, 'Order book should be empty');
 
-      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 1, 300);
+      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 1, 1);
+      await dex.deposit({ value: 1 });
       await dex.createMarketOrder(0, tokenSymbol, 1);
 
       orderBook = await dex.GetOrderBook(tokenSymbol, 1);
@@ -200,7 +210,8 @@ describe('Dex Test', () => {
       let orderBook = await dex.GetOrderBook(tokenSymbol, 1);
       assert(orderBook.length === 0, 'Order book should be empty');
 
-      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 300);
+      await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 1);
+      await dex.deposit({ value: 2 });
       await dex.createMarketOrder(0, tokenSymbol, 2);
 
       orderBook = await dex.GetOrderBook(tokenSymbol, 1);
@@ -209,8 +220,8 @@ describe('Dex Test', () => {
         'Order book should not be filled',
       );
       assert(
-        orderBook[0].amount.toNumber() === 3,
-        'Order book should not be filled',
+        orderBook[0].amount.toNumber() === 5,
+        "Amount shouldn't be changed",
       );
     });
   });

@@ -48,6 +48,8 @@ describe('Wallet contract', () => {
     });
     it('Should withdraw', async () => {
       await wallet.withdrawToken(100, tokenSymbol);
+      await wallet.deposit({ value: 100 });
+      await wallet.withdraw(100);
       ownerBalance = await token.balanceOf(accounts[0].address);
       balanceOfToken = await wallet.balances(accounts[0].address, tokenSymbol);
       expect(await token.totalSupply()).to.equal(ownerBalance);
