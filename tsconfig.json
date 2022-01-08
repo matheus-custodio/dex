@@ -15,9 +15,7 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","./test","./typechain"],
-  "exclude": ["node_modules"],
-  "files": [
-    "./hardhat.config.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./test", "./typechain"],
+  "exclude": ["node_modules", "**/*.js"],
+  "files": ["./hardhat.config.ts"]
 }

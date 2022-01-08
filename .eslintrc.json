@@ -11,6 +11,7 @@
     "airbnb-typescript"
   ],
   "parser": "@typescript-eslint/parser",
+  "files": ["*.ts", "*.tsx"],
   "parserOptions": {
     "project": "./tsconfig.json",
     "ecmaFeatures": {
