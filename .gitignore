@@ -8,6 +8,13 @@
 # testing
 /coverage
 
+# next.js
+/.next/
+/out/
+
+# vercel
+.vercel
+
 # production
 /build
 
@@ -31,3 +38,6 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+# typescript
+*.tsbuildinfo

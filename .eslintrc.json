@@ -19,7 +19,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "mocha"],
+  "plugins": ["react", "@typescript-eslint", "mocha", "prettier"],
   "rules": {
     "@typescript-eslint/indent": ["error"],
     "mocha/no-skipped-tests": "error",
@@ -35,6 +35,16 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "prettier/prettier": "error",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-filename-extension": [2, { "extensions": [".jsx", ".tsx"] }],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "function-declaration"
+      }
+    ],
+    "import/no-unresolved": [2, { "ignore": ["."] }]
   }
 }
