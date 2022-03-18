@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { slide as Menu } from 'react-burger-menu';
 import { useMediaQuery } from 'react-responsive';
-import styles from './menuStyles';
-
+import Account from '../Account';
+import menuStyles from './menuStyles';
 const navigation = [
   { name: 'Trading', href: '#' },
   { name: 'Farming', href: '#' },
@@ -10,14 +10,15 @@ const navigation = [
 ];
 
 export default function NavBar() {
-  const isMobile = useMediaQuery({ maxWidth: 640 });
-
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  //flex items-center justify-center list-none lg:w-auto lg:h-full lg:ml-20
   const navItems = (
-    <ul className="flex items-center justify-center w-full h-auto list-none lg:w-auto lg:h-full lg:ml-20">
-      {navigation.map((item) => (
-        <li
-          key={item.name}
-          className="mr-8
+    <>
+      <ul className="list-none md:flex lg:w-auto lg:h-full lg:ml-20" id="items">
+        {navigation.map((item) => (
+          <li
+            key={item.name}
+            className="mr-8
     flex
     items-center
     justify-center
@@ -29,30 +30,33 @@ export default function NavBar() {
     lg:text-base
     transition-colors
     transition-duration[300ms]
-    hover:text-gray-200
+    hover:text-gray-500
     box-content"
-        >
-          <Link href={item.href}>{item.name}</Link>
-        </li>
-      ))}
-    </ul>
+          >
+            <Link href={item.href}>{item.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 
   return (
-    <div className="relative h-16 px-4 overflow-hidden sm:px-6 lg:px-8 bg-slate-800 shadow-white">
-      <nav
-        className="relative flex items-center justify-between sm:h-10 lg:justify-start"
-        aria-label="Global"
-      >
-        <div className="flex items-center content-center self-center justify-center w-full h-20 pt-4">
-          {isMobile && (
-            <Menu right styles={styles}>
-              {navItems}
-            </Menu>
-          )}
-          {!isMobile && navItems}
+    <nav className=" bg-slate-800">
+      {isMobile && (
+        <Menu styles={menuStyles} pageWrapId={'items'} outerContainerId={'nav'}>
+          {navItems}
+        </Menu>
+      )}
+      <div className="px-8 py-3 mx-auto">
+        <div className="flex">
+          <div className="flex justify-center w-full" id="nav">
+            {!isMobile && navItems}
+          </div>
+          <div>
+            <Account />
+          </div>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav> //relative flex items-center mx-auto mt-3 sm:h-10
   );
 }

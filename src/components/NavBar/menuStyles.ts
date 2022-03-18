@@ -1,10 +1,10 @@
 export default {
   bmBurgerButton: {
-    position: 'absolute',
+    position: 'fixed',
     width: '20px',
     height: '20px',
-    right: '42px',
-    top: '22px',
+    left: '20px',
+    top: '20px',
   },
   bmBurgerBars: {
     background: '#fff',
@@ -21,9 +21,7 @@ export default {
   },
   bmMenuWrap: {
     position: 'fixed',
-    width: '80%',
     height: '100%',
-    top: '0px',
   },
   bmMenu: {
     background: '#373a47',
@@ -38,6 +36,9 @@ export default {
     padding: '0.8em',
   },
   bmItem: {
-    display: 'inline-block',
+    display: 'wrap',
+  },
+  bmOverlay: {
+    background: 'rgba(0, 0, 0, 0.3)',
   },
 };
