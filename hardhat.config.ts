@@ -1,8 +1,8 @@
-import { HardhatUserConfig } from 'hardhat/types';
-import 'tsconfig-paths/register';
-import '@typechain/hardhat';
 import '@nomiclabs/hardhat-waffle';
+import '@typechain/hardhat';
+import { HardhatUserConfig } from 'hardhat/types';
 import 'solidity-coverage';
+import 'tsconfig-paths/register';
 
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
@@ -15,14 +15,6 @@ const config: HardhatUserConfig = {
       chainId: 1337,
     },
   },
-  /*
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      token: 'BNB',
-      gasPriceApi: 'Binance',
-    },
-  }, */
 };
 
 export default config;

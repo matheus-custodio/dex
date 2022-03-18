@@ -39,8 +39,5 @@ typechain
 cache
 /src/artifacts
 
-#typechains
-/typechain-types
-
 # typescript
 *.tsbuildinfo

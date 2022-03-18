@@ -16,6 +16,7 @@ export default function NavBar() {
     <ul className="flex items-center justify-center w-full h-auto list-none lg:w-auto lg:h-full lg:ml-20">
       {navigation.map((item) => (
         <li
+          key={item.name}
           className="mr-8
     flex
     items-center

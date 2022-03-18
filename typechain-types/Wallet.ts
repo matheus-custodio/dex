@@ -22,7 +22,6 @@ export interface WalletInterface extends utils.Interface {
   functions: {
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
-    "c_0xbbb80185(bytes32)": FunctionFragment;
     "deposit()": FunctionFragment;
     "depositToken(uint256,bytes32)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -41,10 +40,6 @@ export interface WalletInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "balances",
     values: [string, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0xbbb80185",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(
@@ -79,10 +74,6 @@ export interface WalletInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "addToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0xbbb80185",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "depositToken",
@@ -162,11 +153,6 @@ export interface Wallet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
     deposit(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -219,11 +205,6 @@ export interface Wallet extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  c_0xbbb80185(
-    c__0xbbb80185: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
   deposit(
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -275,11 +256,6 @@ export interface Wallet extends BaseContract {
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     deposit(overrides?: CallOverrides): Promise<void>;
 
@@ -338,11 +314,6 @@ export interface Wallet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     deposit(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -396,11 +367,6 @@ export interface Wallet extends BaseContract {
     balances(
       arg0: string,
       arg1: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0xbbb80185(
-      c__0xbbb80185: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
