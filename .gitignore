@@ -37,7 +37,10 @@ typechain
 
 #Hardhat files
 cache
-artifacts
+/src/artifacts
+
+#typechains
+/typechain-types
 
 # typescript
 *.tsbuildinfo
