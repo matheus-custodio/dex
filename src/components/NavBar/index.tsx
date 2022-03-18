@@ -38,7 +38,7 @@ export default function NavBar() {
   );
 
   return (
-    <div className="relative h-16 px-4 sm:px-6 lg:px-8 bg-slate-800 shadow-white">
+    <div className="relative h-16 px-4 overflow-hidden sm:px-6 lg:px-8 bg-slate-800 shadow-white">
       <nav
         className="relative flex items-center justify-between sm:h-10 lg:justify-start"
         aria-label="Global"

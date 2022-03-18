@@ -6,19 +6,19 @@ import Orders from '../components/Orders';
 
 function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-600">
+    <div className="min-h-screen bg-slate-600">
       <NavBar />
-      <div className="grid h-screen grid-cols-12 gap-6 px-5 pb-5 my-2 lg:mb-0 md:mb-16">
-        <div className="col-span-12 p-4 text-base text-center lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-400">
+      <div className="grid h-screen grid-cols-12 grid-rows-3 gap-6 px-5 pb-5 my-2 mb-0 ">
+        <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-400">
           <Graph />
         </div>
-        <div className="col-span-12 p-4 text-base text-center lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-400">
+        <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-400">
           <OrderBook />
         </div>
-        <div className="h-auto col-span-12 p-4 text-base text-center lg:col-span-3 rounded-2xl bg-slate-400 md:col-span-8">
+        <div className="col-span-12 row-span-3 p-4 text-base text-center lg:col-span-3 rounded-2xl bg-slate-400 md:col-span-8">
           <Orders />
         </div>
-        <div className="col-span-12 p-4 text-base text-center rounded-2xl bg-slate-400">
+        <div className="col-span-12 p-4 text-base text-center lg:col-span-9 md:col-span-8 rounded-2xl bg-slate-400">
           <History />
         </div>
       </div>
