@@ -1,10 +1,10 @@
 /* eslint-disable operator-linebreak */
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { ethers } from 'hardhat';
-import { BytesLike } from 'ethers';
 import { assert } from 'console';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { BytesLike } from 'ethers';
+import { ethers } from 'hardhat';
 import { Dex, Token } from '../typechain-types';
 
 const { expect } = chai;
@@ -15,17 +15,17 @@ let dex: Dex;
 let token: Token;
 let tokenSymbol: BytesLike;
 let accounts: SignerWithAddress[];
-let bnb: BytesLike;
+let native: BytesLike;
 
 describe('Dex Test', () => {
   beforeEach(async () => {
     dexToken = await ethers.getContractFactory('Token');
     dexContract = await ethers.getContractFactory('Dex');
+    native = ethers.utils.formatBytes32String('BNB');
     token = await dexToken.deploy();
-    dex = await dexContract.deploy();
+    dex = await dexContract.deploy(native);
     accounts = await ethers.getSigners();
     tokenSymbol = ethers.utils.formatBytes32String(await token.symbol());
-    bnb = ethers.utils.formatBytes32String('BNB');
     await token.transfer(accounts[1].address, 5000);
     await dex.addToken(tokenSymbol, token.address);
     await dex.connect(accounts[1]).deposit({ value: 100 });
@@ -93,7 +93,7 @@ describe('Dex Test', () => {
     it('Should have enough for buy order', async () => {
       await dex.connect(accounts[1]).depositToken(100, tokenSymbol);
       await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 2, 2);
-      const balance = await dex.balances(accounts[0].address, bnb);
+      const balance = await dex.balances(accounts[0].address, native);
 
       assert(balance.toNumber() === 0, 'Initial balance not 0');
       await expect(dex.createMarketOrder(0, tokenSymbol, 2)).to.be.reverted;
@@ -152,9 +152,9 @@ describe('Dex Test', () => {
       await dex.connect(accounts[1]).createLimitOrder(1, tokenSymbol, 5, 1);
       await dex.connect(accounts[2]).createLimitOrder(1, tokenSymbol, 5, 2);
 
-      const balanceBefore = await dex.balances(accounts[0].address, bnb);
+      const balanceBefore = await dex.balances(accounts[0].address, native);
       await dex.createMarketOrder(0, tokenSymbol, 10);
-      const balanceAfter = await dex.balances(accounts[0].address, bnb);
+      const balanceAfter = await dex.balances(accounts[0].address, native);
 
       orderBook = await dex.GetOrderBook(tokenSymbol, 1);
       expect(balanceBefore.toNumber() - 15).to.equal(balanceAfter.toNumber());

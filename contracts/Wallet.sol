@@ -7,6 +7,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Wallet is Ownable {
     using SafeMath for uint256;
+    bytes32 public native;
+
+    constructor(bytes32 nativeTicker) {
+        native = nativeTicker;
+    }
 
     struct Token {
         bytes32 ticker;
@@ -59,19 +64,14 @@ contract Wallet is Ownable {
 
     function deposit() external payable {
         require(msg.value > 0);
-        balances[msg.sender][bytes32("BNB")] = balances[msg.sender][
-            bytes32("BNB")
-        ].add(msg.value);
+        balances[msg.sender][native] = balances[msg.sender][native].add(
+            msg.value
+        );
     }
 
     function withdraw(uint256 amount) external {
-        require(
-            balances[msg.sender][bytes32("BNB")] >= amount,
-            "Insuffient balance"
-        );
-        balances[msg.sender][bytes32("BNB")] = balances[msg.sender][
-            bytes32("BNB")
-        ].sub(amount);
+        require(balances[msg.sender][native] >= amount, "Insuffient balance");
+        balances[msg.sender][native] = balances[msg.sender][native].sub(amount);
         (bool success, ) = msg.sender.call{value: amount}("");
         require(
             success,
