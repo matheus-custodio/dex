@@ -1,17 +1,22 @@
 import { ethers } from 'hardhat';
 
 async function main() {
-  const Wallet = await ethers.getContractFactory('Wallet');
+  const native = ethers.utils.formatBytes32String('ETH');
+  const Dex = await ethers.getContractFactory('Dex');
   const Token = await ethers.getContractFactory('Token');
 
-  const wallet = await Wallet.deploy();
+  const dex = await Dex.deploy(native);
   const token = await Token.deploy();
 
-  await wallet.deployed();
+  await dex.deployed();
   await token.deployed();
 
-  console.log('Wallet deployed to:', wallet.address);
+  const tokenSymbol = ethers.utils.formatBytes32String(await token.symbol());
+
+  console.log('Dex deployed to:', dex.address);
   console.log('Token deployed to:', token.address);
+
+  await dex.addToken(tokenSymbol, token.address);
 }
 
 main()

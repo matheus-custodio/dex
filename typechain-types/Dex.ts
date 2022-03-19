@@ -46,6 +46,13 @@ export type OrderStructOutput = [
   filled: BigNumber;
 };
 
+export type TokenStruct = { ticker: BytesLike; tokenAddress: string };
+
+export type TokenStructOutput = [string, string] & {
+  ticker: string;
+  tokenAddress: string;
+};
+
 export interface DexInterface extends utils.Interface {
   functions: {
     "GetOrderBook(bytes32,uint8)": FunctionFragment;
@@ -55,6 +62,7 @@ export interface DexInterface extends utils.Interface {
     "createMarketOrder(uint8,bytes32,uint256)": FunctionFragment;
     "deposit()": FunctionFragment;
     "depositToken(uint256,bytes32)": FunctionFragment;
+    "getTokens()": FunctionFragment;
     "native()": FunctionFragment;
     "nextOrderId()": FunctionFragment;
     "orderBook(bytes32,uint256,uint256)": FunctionFragment;
@@ -92,6 +100,7 @@ export interface DexInterface extends utils.Interface {
     functionFragment: "depositToken",
     values: [BigNumberish, BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: "getTokens", values?: undefined): string;
   encodeFunctionData(functionFragment: "native", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "nextOrderId",
@@ -146,6 +155,7 @@ export interface DexInterface extends utils.Interface {
     functionFragment: "depositToken",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getTokens", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "native", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "nextOrderId",
@@ -257,6 +267,8 @@ export interface Dex extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getTokens(overrides?: CallOverrides): Promise<[TokenStructOutput[]]>;
+
     native(overrides?: CallOverrides): Promise<[string]>;
 
     nextOrderId(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -351,6 +363,8 @@ export interface Dex extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getTokens(overrides?: CallOverrides): Promise<TokenStructOutput[]>;
+
   native(overrides?: CallOverrides): Promise<string>;
 
   nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
@@ -442,6 +456,8 @@ export interface Dex extends BaseContract {
       ticker: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getTokens(overrides?: CallOverrides): Promise<TokenStructOutput[]>;
 
     native(overrides?: CallOverrides): Promise<string>;
 
@@ -544,6 +560,8 @@ export interface Dex extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getTokens(overrides?: CallOverrides): Promise<BigNumber>;
+
     native(overrides?: CallOverrides): Promise<BigNumber>;
 
     nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
@@ -631,6 +649,8 @@ export interface Dex extends BaseContract {
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    getTokens(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     native(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

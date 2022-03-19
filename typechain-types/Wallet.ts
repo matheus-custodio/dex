@@ -18,12 +18,20 @@ import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
+export type TokenStruct = { ticker: BytesLike; tokenAddress: string };
+
+export type TokenStructOutput = [string, string] & {
+  ticker: string;
+  tokenAddress: string;
+};
+
 export interface WalletInterface extends utils.Interface {
   functions: {
     "addToken(bytes32,address)": FunctionFragment;
     "balances(address,bytes32)": FunctionFragment;
     "deposit()": FunctionFragment;
     "depositToken(uint256,bytes32)": FunctionFragment;
+    "getTokens()": FunctionFragment;
     "native()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -47,6 +55,7 @@ export interface WalletInterface extends utils.Interface {
     functionFragment: "depositToken",
     values: [BigNumberish, BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: "getTokens", values?: undefined): string;
   encodeFunctionData(functionFragment: "native", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -81,6 +90,7 @@ export interface WalletInterface extends utils.Interface {
     functionFragment: "depositToken",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getTokens", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "native", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -166,6 +176,8 @@ export interface Wallet extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getTokens(overrides?: CallOverrides): Promise<[TokenStructOutput[]]>;
+
     native(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
@@ -220,6 +232,8 @@ export interface Wallet extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getTokens(overrides?: CallOverrides): Promise<TokenStructOutput[]>;
+
   native(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
@@ -271,6 +285,8 @@ export interface Wallet extends BaseContract {
       ticker: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getTokens(overrides?: CallOverrides): Promise<TokenStructOutput[]>;
 
     native(overrides?: CallOverrides): Promise<string>;
 
@@ -333,6 +349,8 @@ export interface Wallet extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getTokens(overrides?: CallOverrides): Promise<BigNumber>;
+
     native(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
@@ -390,6 +408,8 @@ export interface Wallet extends BaseContract {
       ticker: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    getTokens(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     native(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

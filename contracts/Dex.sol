@@ -21,8 +21,19 @@ contract Dex is Wallet {
         uint256 price;
         uint256 filled;
     }
+    event NewTrade(
+        uint256 tradeId,
+        uint256 orderId,
+        bytes32 indexed ticker,
+        address indexed trader1,
+        address indexed trader2,
+        uint256 amount,
+        uint256 price,
+        uint256 date
+    );
 
     uint256 public nextOrderId;
+    uint256 public nextTradeId;
 
     mapping(bytes32 => mapping(uint256 => Order[])) public orderBook;
 
@@ -99,7 +110,16 @@ contract Dex is Wallet {
             totalFilled = totalFilled.add(filled);
             orders[i].filled = orders[i].filled.add(filled);
             price = filled.mul(orders[i].price);
-
+            emit NewTrade(
+                nextTradeId,
+                orders[i].id,
+                ticker,
+                orders[i].trader,
+                msg.sender,
+                filled,
+                orders[i].price,
+                block.timestamp
+            );
             if (orderType == Type.SELL) {
                 balances[msg.sender][ticker] = balances[msg.sender][ticker].sub(
                     filled
@@ -117,7 +137,7 @@ contract Dex is Wallet {
             if (orderType == Type.BUY) {
                 require(
                     balances[msg.sender][native] >= price,
-                    '"native" balance too low'
+                    "native balance too low"
                 );
                 balances[msg.sender][ticker] = balances[msg.sender][ticker].add(
                     filled
@@ -132,6 +152,7 @@ contract Dex is Wallet {
                     native
                 ].add(price);
             }
+            nextTradeId.add(1);
         }
         while (orders.length > 0 && orders[0].filled == orders[0].amount) {
             for (uint256 i = 0; i < orders.length - 1; i++) {

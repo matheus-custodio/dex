@@ -31,6 +31,17 @@ contract Wallet is Ownable {
         _;
     }
 
+    function getTokens() external view returns (Token[] memory) {
+        Token[] memory _tokens = new Token[](tokenList.length);
+        for (uint256 i = 0; i < tokenList.length; i++) {
+            _tokens[i] = Token(
+                tokenMapping[tokenList[i]].ticker,
+                tokenMapping[tokenList[i]].tokenAddress
+            );
+        }
+        return _tokens;
+    }
+
     function addToken(bytes32 ticker, address tokenAddress) external onlyOwner {
         tokenMapping[ticker] = Token(ticker, tokenAddress);
         tokenList.push(ticker);

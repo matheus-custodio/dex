@@ -18,20 +18,20 @@ export default function NavBar() {
         {navigation.map((item) => (
           <li
             key={item.name}
-            className="mr-8
-    flex
-    items-center
-    justify-center
-    min-h-full
-    text-white
-    cursor-pointer
-    font-medium
-    text-lg
-    lg:text-base
-    transition-colors
-    transition-duration[300ms]
-    hover:text-gray-500
-    box-content"
+            className=" mr-8
+                        flex
+                        items-center
+                        justify-center
+                        min-h-full
+                        text-white
+                        cursor-pointer
+                        font-medium
+                        text-lg
+                        lg:text-base
+                        transition-colors
+                        transition-duration[300ms]
+                        hover:text-gray-500
+                        box-content"
           >
             <Link href={item.href}>{item.name}</Link>
           </li>
