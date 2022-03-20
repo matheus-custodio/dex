@@ -65,6 +65,7 @@ export interface DexInterface extends utils.Interface {
     "getTokens()": FunctionFragment;
     "native()": FunctionFragment;
     "nextOrderId()": FunctionFragment;
+    "nextTradeId()": FunctionFragment;
     "orderBook(bytes32,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -104,6 +105,10 @@ export interface DexInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "native", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "nextOrderId",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "nextTradeId",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -161,6 +166,10 @@ export interface DexInterface extends utils.Interface {
     functionFragment: "nextOrderId",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "nextTradeId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "orderBook", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -183,11 +192,38 @@ export interface DexInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "NewTrade(uint256,uint256,bytes32,address,address,uint256,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "NewTrade"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export type NewTradeEvent = TypedEvent<
+  [
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ],
+  {
+    tradeId: BigNumber;
+    orderId: BigNumber;
+    ticker: string;
+    trader1: string;
+    trader2: string;
+    amount: BigNumber;
+    price: BigNumber;
+    date: BigNumber;
+  }
+>;
+
+export type NewTradeEventFilter = TypedEventFilter<NewTradeEvent>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string],
@@ -272,6 +308,8 @@ export interface Dex extends BaseContract {
     native(overrides?: CallOverrides): Promise<[string]>;
 
     nextOrderId(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    nextTradeId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     orderBook(
       arg0: BytesLike,
@@ -369,6 +407,8 @@ export interface Dex extends BaseContract {
 
   nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
 
+  nextTradeId(overrides?: CallOverrides): Promise<BigNumber>;
+
   orderBook(
     arg0: BytesLike,
     arg1: BigNumberish,
@@ -463,6 +503,8 @@ export interface Dex extends BaseContract {
 
     nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
 
+    nextTradeId(overrides?: CallOverrides): Promise<BigNumber>;
+
     orderBook(
       arg0: BytesLike,
       arg1: BigNumberish,
@@ -506,6 +548,27 @@ export interface Dex extends BaseContract {
   };
 
   filters: {
+    "NewTrade(uint256,uint256,bytes32,address,address,uint256,uint256,uint256)"(
+      tradeId?: null,
+      orderId?: null,
+      ticker?: BytesLike | null,
+      trader1?: string | null,
+      trader2?: string | null,
+      amount?: null,
+      price?: null,
+      date?: null
+    ): NewTradeEventFilter;
+    NewTrade(
+      tradeId?: null,
+      orderId?: null,
+      ticker?: BytesLike | null,
+      trader1?: string | null,
+      trader2?: string | null,
+      amount?: null,
+      price?: null,
+      date?: null
+    ): NewTradeEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -565,6 +628,8 @@ export interface Dex extends BaseContract {
     native(overrides?: CallOverrides): Promise<BigNumber>;
 
     nextOrderId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nextTradeId(overrides?: CallOverrides): Promise<BigNumber>;
 
     orderBook(
       arg0: BytesLike,
@@ -655,6 +720,8 @@ export interface Dex extends BaseContract {
     native(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     nextOrderId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nextTradeId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     orderBook(
       arg0: BytesLike,

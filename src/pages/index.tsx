@@ -1,9 +1,34 @@
+import { Web3Provider } from '@ethersproject/providers';
+import { Contract } from 'ethers';
+import { useEffect, useState } from 'react';
+import { useMoralis } from 'react-moralis';
+import { contractAddress } from '../../config';
+import abi from '../artifacts/contracts/Dex.sol/Dex.json';
 import Graph from '../components/Graph';
 import History from '../components/History';
 import OrderBook from '../components/OrderBook';
 import Orders from '../components/Orders';
 
 function HomePage() {
+  const { Moralis } = useMoralis();
+  let [web3, setWeb3] = useState<Web3Provider>();
+  let [contract, setContract] = useState<any | Contract>();
+  const ethers = Moralis.web3Library;
+
+  useEffect(() => {
+    const init = async () => {
+      const provider = await Moralis.enableWeb3();
+      const contract = new ethers.Contract(
+        contractAddress,
+        JSON.stringify(abi),
+        provider,
+      );
+      setWeb3(provider);
+      setContract(contract);
+    };
+    init();
+    // eslint-disable-next-line
+  }, []);
   return (
     <div className="grid h-screen grid-cols-12 grid-rows-3 gap-6 px-5 pb-5 my-2 mb-0 ">
       <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-400">
