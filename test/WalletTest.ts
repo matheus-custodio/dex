@@ -14,13 +14,11 @@ describe('Wallet contract', () => {
   let token: Token;
   let accounts: SignerWithAddress[];
   let tokenSymbol: BytesLike;
-  let native: BytesLike;
   beforeEach(async () => {
     dexToken = await ethers.getContractFactory('Token');
     contractWallet = await ethers.getContractFactory('Wallet');
-    native = ethers.utils.formatBytes32String('BNB');
     token = await dexToken.deploy();
-    wallet = await contractWallet.deploy(native);
+    wallet = await contractWallet.deploy();
     accounts = await ethers.getSigners();
     tokenSymbol = ethers.utils.formatBytes32String(await token.symbol());
     await wallet.addToken(tokenSymbol, token.address);

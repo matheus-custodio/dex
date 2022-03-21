@@ -1,9 +1,5 @@
 function Graph() {
-  return (
-    <div className="flex items-center justify-between px-5 py-3 my-3">
-      Graph
-    </div>
-  );
+  return <div className="flex">Graph</div>;
 }
 
 export default Graph;

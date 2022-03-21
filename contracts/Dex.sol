@@ -5,8 +5,6 @@ pragma abicoder v2;
 import "./Wallet.sol";
 
 contract Dex is Wallet {
-    constructor(bytes32 nativeTicker) Wallet(nativeTicker) {}
-
     using SafeMath for uint256;
     enum Type {
         BUY,
@@ -50,9 +48,9 @@ contract Dex is Wallet {
         bytes32 ticker,
         uint256 amount,
         uint256 price
-    ) external tokenExist(ticker) tokenIsNotnative(ticker) {
+    ) external tokenExist(ticker) tokenIsNotTBNB(ticker) {
         if (orderType == Type.BUY) {
-            require(balances[msg.sender][native] >= amount.mul(price));
+            require(balances[msg.sender][TBNB] >= amount.mul(price));
         } else if (orderType == Type.SELL) {
             require(balances[msg.sender][ticker] >= amount);
         }
@@ -85,7 +83,7 @@ contract Dex is Wallet {
         Type orderType,
         bytes32 ticker,
         uint256 amount
-    ) external tokenExist(ticker) tokenIsNotnative(ticker) {
+    ) external tokenExist(ticker) tokenIsNotTBNB(ticker) {
         if (orderType == Type.SELL) {
             require(
                 balances[msg.sender][ticker] >= amount,
@@ -124,32 +122,32 @@ contract Dex is Wallet {
                 balances[msg.sender][ticker] = balances[msg.sender][ticker].sub(
                     filled
                 );
-                balances[msg.sender][native] = balances[msg.sender][native].add(
+                balances[msg.sender][TBNB] = balances[msg.sender][TBNB].add(
                     price
                 );
                 balances[orders[i].trader][ticker] = balances[orders[i].trader][
                     ticker
                 ].add(filled);
-                balances[orders[i].trader][native] = balances[orders[i].trader][
-                    native
+                balances[orders[i].trader][TBNB] = balances[orders[i].trader][
+                    TBNB
                 ].sub(price);
             }
             if (orderType == Type.BUY) {
                 require(
-                    balances[msg.sender][native] >= price,
-                    "native balance too low"
+                    balances[msg.sender][TBNB] >= price,
+                    "TBNB balance too low"
                 );
                 balances[msg.sender][ticker] = balances[msg.sender][ticker].add(
                     filled
                 );
-                balances[msg.sender][native] = balances[msg.sender][native].sub(
+                balances[msg.sender][TBNB] = balances[msg.sender][TBNB].sub(
                     price
                 );
                 balances[orders[i].trader][ticker] = balances[orders[i].trader][
                     ticker
                 ].sub(filled);
-                balances[orders[i].trader][native] = balances[orders[i].trader][
-                    native
+                balances[orders[i].trader][TBNB] = balances[orders[i].trader][
+                    TBNB
                 ].add(price);
             }
             nextTradeId.add(1);
@@ -162,8 +160,8 @@ contract Dex is Wallet {
         }
     }
 
-    modifier tokenIsNotnative(bytes32 ticker) {
-        require(ticker != native, "cannot trade this token");
+    modifier tokenIsNotTBNB(bytes32 ticker) {
+        require(ticker != TBNB, "cannot trade this token");
         _;
     }
 }

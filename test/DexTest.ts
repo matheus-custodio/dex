@@ -21,9 +21,9 @@ describe('Dex Test', () => {
   beforeEach(async () => {
     dexToken = await ethers.getContractFactory('Token');
     dexContract = await ethers.getContractFactory('Dex');
-    native = ethers.utils.formatBytes32String('BNB');
+    native = ethers.utils.formatBytes32String('TBNB');
     token = await dexToken.deploy();
-    dex = await dexContract.deploy(native);
+    dex = await dexContract.deploy();
     accounts = await ethers.getSigners();
     tokenSymbol = ethers.utils.formatBytes32String(await token.symbol());
     await token.transfer(accounts[1].address, 5000);

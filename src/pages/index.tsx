@@ -1,9 +1,7 @@
-import { Web3Provider } from '@ethersproject/providers';
-import { Contract } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 import { contractAddress } from '../../config';
-import abi from '../artifacts/contracts/Dex.sol/Dex.json';
+import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 import Graph from '../components/Graph';
 import History from '../components/History';
 import NavBar from '../components/NavBar';
@@ -11,26 +9,34 @@ import OrderBook from '../components/OrderBook';
 import Orders from '../components/Orders';
 
 function HomePage() {
-  const { Moralis, isWeb3Enabled, isAuthenticated, isWeb3EnableLoading } =
-    useMoralis();
-  let [web3, setWeb3] = useState<Web3Provider>();
-  let [contract, setContract] = useState<any | Contract>();
+  const {
+    Moralis,
+    isWeb3Enabled,
+    isAuthenticated,
+    isWeb3EnableLoading,
+    enableWeb3,
+  } = useMoralis();
   const ethers = Moralis.web3Library;
   useEffect(() => {
-    async () => {
-      if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
-        const provider = await Moralis.enableWeb3();
+    console.log(isWeb3Enabled);
+    if (!isWeb3Enabled && !isWeb3EnableLoading) {
+      enableWeb3();
+    }
+    async function init() {
+      if (isWeb3Enabled) {
+        const web3Provider = await Moralis.enableWeb3();
         const contract = new ethers.Contract(
           contractAddress,
-          JSON.stringify(abi),
-          provider,
+          JSON.stringify(ABI),
+          web3Provider,
         );
-        setWeb3(provider);
-        setContract(contract);
+        console.log('MTK ', ethers.utils.formatBytes32String('MTK'));
+        const name = await contract.getTokens();
+        console.log('name ', name);
       }
-    };
+    }
+    init();
   }, [isAuthenticated, isWeb3Enabled]);
-
   return (
     <div className="min-h-screen bg-slate-600">
       <NavBar />

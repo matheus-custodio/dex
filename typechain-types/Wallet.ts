@@ -32,7 +32,6 @@ export interface WalletInterface extends utils.Interface {
     "deposit()": FunctionFragment;
     "depositToken(uint256,bytes32)": FunctionFragment;
     "getTokens()": FunctionFragment;
-    "native()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "tokenList(uint256)": FunctionFragment;
@@ -56,7 +55,6 @@ export interface WalletInterface extends utils.Interface {
     values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "getTokens", values?: undefined): string;
-  encodeFunctionData(functionFragment: "native", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -91,7 +89,6 @@ export interface WalletInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getTokens", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "native", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -178,8 +175,6 @@ export interface Wallet extends BaseContract {
 
     getTokens(overrides?: CallOverrides): Promise<[TokenStructOutput[]]>;
 
-    native(overrides?: CallOverrides): Promise<[string]>;
-
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -234,8 +229,6 @@ export interface Wallet extends BaseContract {
 
   getTokens(overrides?: CallOverrides): Promise<TokenStructOutput[]>;
 
-  native(overrides?: CallOverrides): Promise<string>;
-
   owner(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
@@ -287,8 +280,6 @@ export interface Wallet extends BaseContract {
     ): Promise<void>;
 
     getTokens(overrides?: CallOverrides): Promise<TokenStructOutput[]>;
-
-    native(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -351,8 +342,6 @@ export interface Wallet extends BaseContract {
 
     getTokens(overrides?: CallOverrides): Promise<BigNumber>;
 
-    native(overrides?: CallOverrides): Promise<BigNumber>;
-
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
@@ -410,8 +399,6 @@ export interface Wallet extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getTokens(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    native(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

@@ -42,13 +42,13 @@ export default function NavBar() {
   );
 
   return (
-    <nav className="bg-slate-800 h-14">
+    <nav className="h-16 bg-slate-800">
       {isMobile && (
         <Menu styles={menuStyles} pageWrapId={'items'} outerContainerId={'nav'}>
           {navItems}
         </Menu>
       )}
-      <div className="grid items-center grid-cols-3 gap-1 px-4 py-2">
+      <div className="grid items-center grid-cols-3 gap-1 px-4 py-3">
         <div className="flex justify-center col-span-1 col-start-2 " id="nav">
           {!isMobile && navItems}
         </div>
