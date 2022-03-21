@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { slide as Menu } from 'react-burger-menu';
 import { useMediaQuery } from 'react-responsive';
 import Account from '../Account';
+import Balance from '../Balance';
 import menuStyles from './menuStyles';
 const navigation = [
   { name: 'Trading', href: '#' },
@@ -41,20 +42,19 @@ export default function NavBar() {
   );
 
   return (
-    <nav className=" bg-slate-800">
+    <nav className="bg-slate-800 h-14">
       {isMobile && (
         <Menu styles={menuStyles} pageWrapId={'items'} outerContainerId={'nav'}>
           {navItems}
         </Menu>
       )}
-      <div className="px-8 py-3 mx-auto">
-        <div className="flex">
-          <div className="flex justify-center w-full" id="nav">
-            {!isMobile && navItems}
-          </div>
-          <div>
-            <Account />
-          </div>
+      <div className="grid items-center grid-cols-3 gap-1 px-4 py-2">
+        <div className="flex justify-center col-span-1 col-start-2 " id="nav">
+          {!isMobile && navItems}
+        </div>
+        <div className="flex justify-end col-span-1">
+          <Balance />
+          <Account />
         </div>
       </div>
     </nav> //relative flex items-center mx-auto mt-3 sm:h-10

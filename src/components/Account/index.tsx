@@ -1,24 +1,27 @@
+import { useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 
 function Account() {
-  const { authenticate, isAuthenticated, logout } = useMoralis();
+  useEffect(() => {});
+  const { authenticate, isAuthenticated, logout, user } = useMoralis();
+  const isLogged = !isAuthenticated || !user?.authenticated();
 
-  if (!isAuthenticated) {
-    return (
-      <div
-        className="px-4 py-2 transition duration-300 rounded-lg cursor-pointer bg-slate-400 hover:bg-slate-600 hover:text-white"
-        onClick={() => authenticate()}
-      >
-        Connect
-      </div>
-    );
-  }
   return (
     <div
-      className="px-4 py-2 transition duration-300 rounded-lg cursor-pointer bg-slate-400 hover:bg-slate-600 hover:text-white"
-      onClick={() => logout()}
+      className="w-[170px] px-4 py-2 truncate transition duration-300 rounded-lg cursor-pointer bg-slate-400 hover:bg-slate-600 hover:text-white text-center"
+      onClick={() => {
+        try {
+          if (isLogged) {
+            authenticate();
+          } else {
+            logout();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }}
     >
-      Disconnect
+      {isLogged ? 'Connect Wallet' : 'Disconnect Wallet'}
     </div>
   );
 }
