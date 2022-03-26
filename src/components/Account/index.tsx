@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
-import { useMoralis } from 'react-moralis';
+import { useChain, useMoralis } from 'react-moralis';
 
 function Account() {
   useEffect(() => {});
   const { authenticate, isAuthenticated, logout, account } = useMoralis();
-
+  const { switchNetwork, chainId } = useChain();
+  async function logIn() {
+    if (chainId != '0x61') await switchNetwork('0x61');
+    authenticate();
+  }
   const isLogged = !isAuthenticated || !account;
   return (
     <div
@@ -12,7 +16,7 @@ function Account() {
       onClick={() => {
         try {
           if (isLogged) {
-            authenticate();
+            logIn();
           } else {
             logout();
           }

@@ -1,8 +1,7 @@
 import { useMoralis } from 'react-moralis';
 
 function Balance() {
-  const { isAuthenticated, account, isWeb3Enabled, chainId, Moralis } =
-    useMoralis();
+  const { isAuthenticated, account, isWeb3Enabled } = useMoralis();
 
   if (isAuthenticated && account && isWeb3Enabled) {
     return (

@@ -12,7 +12,6 @@ const navigation = [
 
 export default function NavBar() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  //flex items-center justify-center list-none lg:w-auto lg:h-full lg:ml-20
   const navItems = (
     <>
       <ul className="list-none md:flex lg:w-auto lg:h-full lg:ml-20" id="items">
@@ -57,6 +56,6 @@ export default function NavBar() {
           <Account />
         </div>
       </div>
-    </nav> //relative flex items-center mx-auto mt-3 sm:h-10
+    </nav>
   );
 }
