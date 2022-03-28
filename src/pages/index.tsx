@@ -38,11 +38,14 @@ function HomePage() {
   const getTokens = async () => {
     const rawTokens = await contract.getTokens();
     const tokens = rawTokens.map((token: any) => {
+      console.log('token ', token[0]);
       return {
         ticker: ethers.utils.parseBytes32String(token.ticker),
         tokenAddress: token.tokenAddress,
+        bytes: token[0],
       };
     });
+    console.log('tokens ', tokens);
     setTokens(tokens);
   };
 
@@ -57,6 +60,8 @@ function HomePage() {
         SIDE.SELL,
       ),
     ]);
+    console.log('orders[0] ', orders[0]);
+    console.log('orders[1] ', orders[1]);
     return { BUY: orders[0], SELL: orders[1] };
   };
 
@@ -82,7 +87,7 @@ function HomePage() {
             provider,
           );
           getTokens();
-          //getOrders(tokens[0]);
+          getOrders(tokens[0]);
         } catch (e) {
           console.log(e);
         }
