@@ -3,13 +3,13 @@ import { BytesLike } from 'ethers/';
 export type Token = [
   {
     ticker: string;
-    tokenAddress: string;
+    tokenAddress: string | undefined;
     bytes32: BytesLike;
   },
 ];
 
-export type Account = {
-  address: String;
+export type AccountType = {
+  address: string;
   balance: {
     nativeToken: 0;
     dexToken: 0;
@@ -21,5 +21,12 @@ export type Asset = {
   isActive: boolean;
   depositToken: Function;
   withdrawToken: Function;
-  user: Account | undefined;
+  user: AccountType | undefined;
 };
+
+export type BalanceList = [
+  {
+    token: any;
+    balance: string | number;
+  },
+];
