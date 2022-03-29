@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useChain, useMoralis } from 'react-moralis';
 import { contractAddress, nodeUrl } from '../../config';
-import { Token } from '../../type';
+import { Account, Token } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
+import Assets from '../components/Assets';
 import Graph from '../components/Graph';
 import History from '../components/History';
 import NavBar from '../components/NavBar';
@@ -14,11 +15,12 @@ function HomePage() {
     BUY: 0,
     SELL: 1,
   };
+  const [user, setUser] = useState<Account>();
   const [orders, setOrders] = useState({
     BUY: [],
     SELL: [],
   });
-  const [tokens, setTokens] = useState<Token>();
+  const [tokens, setTokens] = useState<Token | undefined>();
   const { switchNetwork, chainId } = useChain();
   const {
     Moralis,
@@ -26,43 +28,89 @@ function HomePage() {
     isAuthenticated,
     isWeb3EnableLoading,
     enableWeb3,
-    user,
     account,
     logout,
     authenticate,
   } = useMoralis();
   const ethers = Moralis.web3Library;
   const provider = new ethers.providers.JsonRpcProvider(nodeUrl);
+  const signer = provider.getSigner(account!);
+  let isUser = typeof user != 'undefined';
   let contract: any;
+  let contractSigner: any;
+  if (isWeb3Enabled) {
+    contract = new ethers.Contract(
+      contractAddress,
+      JSON.stringify(ABI),
+      signer,
+    );
+    // contractSigner = new ethers.Contract(
+    //   contractAddress,
+    //   JSON.stringify(ABI),
+    //   signer,
+    // );
+  }
   //methods
+  const createUser = (address: any, balance: any, token: Token) => {
+    const newUser = {
+      address: address,
+      balance: balance,
+      selectedToken: token,
+    };
+    return newUser;
+  };
   const getTokens = async () => {
     const rawTokens = await contract.getTokens();
     const tokens = rawTokens.map((token: any) => {
-      console.log('token ', token[0]);
       return {
         ticker: ethers.utils.parseBytes32String(token.ticker),
         tokenAddress: token.tokenAddress,
-        bytes: token[0],
+        bytes32: token[0],
       };
     });
-    console.log('tokens ', tokens);
-    setTokens(tokens);
+    return tokens;
   };
 
   const getOrders = async (token: any) => {
     const orders = await Promise.all([
-      contract.GetOrderBook(
-        ethers.utils.formatBytes32String(token.ticker),
-        SIDE.BUY,
-      ),
-      contract.GetOrderBook(
-        ethers.utils.formatBytes32String(token.ticker),
-        SIDE.SELL,
-      ),
+      contract.GetOrderBook(token.bytes32, SIDE.BUY),
+      contract.GetOrderBook(token.bytes32, SIDE.SELL),
     ]);
-    console.log('orders[0] ', orders[0]);
-    console.log('orders[1] ', orders[1]);
     return { BUY: orders[0], SELL: orders[1] };
+  };
+
+  const getBalances = async (account: any, bytes32: any) => {
+    const balances = await Promise.all([
+      contract.balances(account, ethers.utils.formatBytes32String('TBNB')),
+      contract.balances(account, bytes32),
+    ]);
+    return {
+      nativeToken: balances[0].toString(),
+      dexToken: balances[1].toString(),
+    };
+  };
+
+  const selectToken = (token: any) => {
+    const newState: Account = createUser(user?.address, user?.balance!, token);
+    setUser(newState);
+  };
+
+  const depositToken = async (amount: BigInteger, bytes32: any) => {
+    await contract.depositToken(amount, bytes32);
+    const balances = await getBalances(
+      user?.address,
+      user?.selectedToken.bytes32,
+    );
+    setUser(createUser(user?.address, balances, user?.selectedToken));
+  };
+
+  const withdrawToken = async (amount: BigInteger, bytes32: any) => {
+    await contract.withdrawToken(amount, bytes32);
+    const balances = await getBalances(
+      user?.address,
+      user?.selectedToken.bytes32,
+    );
+    setUser(createUser(user?.address, balances, user?.selectedToken));
   };
 
   useEffect(() => {
@@ -81,29 +129,43 @@ function HomePage() {
           authenticate();
         }
         try {
-          contract = new ethers.Contract(
-            contractAddress,
-            JSON.stringify(ABI),
-            provider,
+          const tokens = await getTokens();
+          const orders = await getOrders(
+            isUser ? user?.selectedToken : tokens[0],
           );
-          getTokens();
-          getOrders(tokens[0]);
+          console.log(
+            'account != null && !isUser && isAuthenticated ',
+            account != null && !isUser && isAuthenticated,
+          );
+          if (account != null && !isUser && isAuthenticated) {
+            const balances = await getBalances(account, tokens[0].bytes32);
+            setUser({
+              address: account,
+              balance: balances,
+              selectedToken: tokens[0],
+            });
+          }
+          setTokens(tokens);
+          setOrders(orders);
         } catch (e) {
           console.log(e);
         }
       }
     }
+    isUser = typeof user != 'undefined';
     init();
-  }, [isWeb3Enabled, chainId]);
-  console.log('user ', user);
-  console.log('account ', account);
+    // if (isAuthenticated && !isUser) {
+    //   console.log('account, tokens[0] ', account, tokens[0]);
+    //   getBalances(account, tokens[0]);
+    // }
+  }, [isWeb3Enabled, chainId, isAuthenticated]);
   //read -->
-  //getOrderBook
+  //getOrderBook - OK
   //getTokens - OK
   //NewTrade event
 
   //TokenPage -->
-  //getBalances
+  //getBalances - OK
 
   //write -->
   //admin -->
@@ -117,24 +179,34 @@ function HomePage() {
   //depositToken
   //withdraw
   //withdrawToken
-
+  console.log('isUser ', isUser);
   return (
     <div className="min-h-screen bg-slate-600">
       <NavBar />
-      <div className="grid h-screen grid-cols-12 grid-rows-3 gap-6 px-5 pb-5 my-2 mb-0 ">
-        <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-400">
-          <Graph />
+      {isWeb3Enabled ? (
+        <div className="grid h-screen grid-cols-12 grid-rows-3 gap-6 px-5 pb-5 my-2 mb-0 ">
+          <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-400">
+            <Graph />
+          </div>
+          <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-400">
+            <OrderBook />
+          </div>
+          <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl md:col-span-8">
+            <div className="row-span-2 min-h-[50%] bg-slate-400 rounded-2xl">
+              <Assets
+                isActive={isUser}
+                depositToken={depositToken}
+                withdrawToken={withdrawToken}
+                user={user}
+              />
+            </div>
+            <Orders />
+          </div>
+          <div className="col-span-12 p-4 text-base text-center lg:col-span-9 md:col-span-8 rounded-2xl bg-slate-400">
+            <History />
+          </div>
         </div>
-        <div className="col-span-12 row-span-2 p-4 text-base text-center lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-400">
-          <OrderBook />
-        </div>
-        <div className="col-span-12 row-span-3 p-4 text-base text-center lg:col-span-3 rounded-2xl bg-slate-400 md:col-span-8">
-          <Orders />
-        </div>
-        <div className="col-span-12 p-4 text-base text-center lg:col-span-9 md:col-span-8 rounded-2xl bg-slate-400">
-          <History />
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 }
