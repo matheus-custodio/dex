@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useChain, useMoralis } from 'react-moralis';
+import { useMoralis } from 'react-moralis';
 import { contractAddress, nodeUrl } from '../../config';
 import { AccountType, Token } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
@@ -17,7 +17,6 @@ function trading() {
   const [user, setUser] = useState<AccountType | any>();
   const [orders, setOrders] = useState();
   const [tokens, setTokens] = useState<Token | undefined>();
-  const { switchNetwork, chainId } = useChain();
   const {
     Moralis,
     isWeb3Enabled,
@@ -30,7 +29,9 @@ function trading() {
   } = useMoralis();
   const ethers = Moralis.web3Library;
   const provider = new ethers.providers.JsonRpcProvider(nodeUrl);
+  console.log('provider ', provider);
   const signer = provider.getSigner(account!);
+  console.log('signer ', signer);
   let isUser = typeof user != 'undefined';
   let contract: any;
   if (isWeb3Enabled) {
@@ -158,7 +159,7 @@ function trading() {
       console.log('cancel');
       isActive = false;
     };
-  }, [isWeb3Enabled, chainId, isAuthenticated]);
+  }, [isWeb3Enabled, isAuthenticated]);
   //read -->
   //getOrderBook - OK
   //getTokens - OK

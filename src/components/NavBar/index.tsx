@@ -21,29 +21,29 @@ export default function NavBar() {
     isWeb3EnableLoading,
     logout,
     authenticate,
+    Moralis,
   } = useMoralis();
   const { switchNetwork, chainId } = useChain();
 
   useEffect(() => {
-    if (!isWeb3Enabled && !isWeb3EnableLoading) {
-      enableWeb3();
-    }
-  }, [isAuthenticated, isWeb3Enabled]);
+    if (!isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+  }, [isWeb3Enabled]);
 
   useEffect(() => {
-    async function init() {
-      if (isWeb3Enabled) {
-        if (chainId != '0x61' && isAuthenticated) {
-          logout();
-        } else if (chainId != '0x61') {
-          await switchNetwork('0x61');
-          authenticate();
-        }
-      }
+    if (isWeb3Enabled && isWeb3EnableLoading && chainId != '0x61') {
+      switchNetwork('0x61');
     }
-    init();
-  }),
-    [chainId, isWeb3Enabled, isAuthenticated];
+  }, [isWeb3Enabled, chainId]);
+
+  useEffect(() => {
+    if (chainId != '0x61' && isAuthenticated) {
+      logout();
+    }
+    if (chainId === '0x61' && !isAuthenticated) {
+      authenticate();
+    }
+  }, [chainId]);
+
   const isMobile = useMediaQuery({ maxWidth: 920 });
   const navItems = (
     <>
@@ -74,12 +74,19 @@ export default function NavBar() {
   );
   return (
     <nav className="w-full border-b-2 border-slate-900 bg-slate-800">
-      {isMobile && (
-        <Menu styles={menuStyles} pageWrapId={'items'} outerContainerId={'nav'}>
-          {navItems}
-        </Menu>
-      )}
       <div className="grid items-center grid-cols-3 gap-1">
+        {isMobile && (
+          <div className="flex col-span-1 p-3">
+            <Menu
+              styles={menuStyles}
+              pageWrapId={'items'}
+              outerContainerId={'nav'}
+            >
+              {navItems}
+            </Menu>
+          </div>
+        )}
+
         <div className="flex justify-center col-span-1 col-start-2 " id="nav">
           {!isMobile && navItems}
         </div>

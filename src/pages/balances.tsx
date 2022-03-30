@@ -18,6 +18,8 @@ function balances() {
   const ethers = Moralis.web3Library;
   const provider = new ethers.providers.JsonRpcProvider(nodeUrl);
   const signer = provider.getSigner(account!);
+  console.log('provider', provider);
+  console.log('signer', signer);
   let contract: any;
   if (isWeb3Enabled) {
     contract = new ethers.Contract(
@@ -73,7 +75,7 @@ function balances() {
   useEffect(() => {
     let balanceList;
     async function init() {
-      if (isWeb3Enabled && account) {
+      if (isWeb3Enabled && account && isAuthenticated) {
         try {
           const tokens = await getTokens();
           balanceList = getBalanceList(account, tokens);
@@ -84,15 +86,14 @@ function balances() {
     }
     init();
     setBalanceList(balanceList);
-    // if (isAuthenticated && !isUser) {
-    //   console.log('account, tokens[0] ', account, tokens[0]);
-    //   getBalances(account, tokens[0]);
-    // }
   }, [isWeb3Enabled, isAuthenticated]);
   console.log('balances ', balanceList);
+
   return (
-    <div className="flex-1 m-4 grow bg-slate-700 rounded-2xl">
-      <div>balances</div>
+    <div className="flex justify-center min-h-[93vh] items-center">
+      <div className="flex bg-slate-700 rounded-2xl min-h-[90vh] w-[90%]">
+        <div>balances</div>
+      </div>
     </div>
   );
 }
