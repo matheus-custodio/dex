@@ -90,7 +90,11 @@ function balances() {
     // }
   }, [isWeb3Enabled, isAuthenticated]);
   console.log('balances ', balanceList);
-  return <div className="bg-slate-800">balances</div>;
+  return (
+    <div className="flex-1 m-4 grow bg-slate-700 rounded-2xl">
+      <div>balances</div>
+    </div>
+  );
 }
 
 export default balances;

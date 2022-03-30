@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       appId={process.env.NEXT_PUBLIC_APP_ID ?? 'AppId Undefined'}
       serverUrl={process.env.NEXT_PUBLIC_SERVER_URL ?? 'ServerUrl Undefined'}
     >
-      <div className="flex-1 min-h-screen bg-slate-600">
+      <div className="h-screen bg-slate-600">
         <NavBar />
         <Component {...pageProps} />
       </div>
