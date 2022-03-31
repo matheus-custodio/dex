@@ -12,7 +12,6 @@ const navigation = [
   { name: 'Pools', href: '#' },
   { name: 'Balances', href: '/balances' },
 ];
-
 export default function NavBar() {
   const {
     isWeb3Enabled,
@@ -21,7 +20,6 @@ export default function NavBar() {
     isWeb3EnableLoading,
     logout,
     authenticate,
-    Moralis,
   } = useMoralis();
   const { switchNetwork, chainId } = useChain();
 
@@ -44,7 +42,6 @@ export default function NavBar() {
     }
   }, [chainId]);
 
-  const isMobile = useMediaQuery({ maxWidth: 920 });
   const navItems = (
     <>
       <ul className="list-none md:flex lg:w-auto lg:h-full lg:ml-20" id="items">
@@ -72,11 +69,15 @@ export default function NavBar() {
       </ul>
     </>
   );
+
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
   return (
-    <nav className="w-full border-b-2 border-slate-900 bg-slate-800">
-      <div className="grid items-center grid-cols-3 gap-1">
-        {isMobile && (
-          <div className="flex col-span-1 p-3">
+    <div className="w-full border-b-2 border-slate-900 bg-slate-800">
+      <div className="grid grid-cols-3 gap-1">
+        <div className="flex items-center justify-start col-span-1 p-3 lg:justify-center lg:col-start-2">
+          {!isMobile ? (
+            <>{navItems}</>
+          ) : (
             <Menu
               styles={menuStyles}
               pageWrapId={'items'}
@@ -84,16 +85,13 @@ export default function NavBar() {
             >
               {navItems}
             </Menu>
-          </div>
-        )}
-
-        <div className="flex justify-center col-span-1 col-start-2 " id="nav">
-          {!isMobile && navItems}
+          )}
         </div>
-        <div className="flex justify-end col-span-1 p-3">
+
+        <div className="flex justify-end col-span-1 col-start-3 p-3">
           <Account />
         </div>
       </div>
-    </nav>
+    </div>
   );
 }

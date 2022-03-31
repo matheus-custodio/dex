@@ -1,25 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import { contractAddress, nodeUrl } from '../../config';
-import { BalanceList } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
+const DIRECTION = {
+  WITHDRAW: 'WITHDRAW',
+  DEPOSIT: 'DEPOSIT',
+};
 
 function balances() {
-  const [balanceList, setBalanceList] = useState<BalanceList>();
-  const {
-    Moralis,
-    isWeb3Enabled,
-    isAuthenticated,
-    enableWeb3,
-    account,
-    logout,
-    authenticate,
-  } = useMoralis();
+  const isSelected = 'bg-slate-900 text-white';
+  const [selected, setSelected] = useState<string>();
+  const [amount, setAmount] = useState<Map<string, number>>(
+    new Map<string, number>(),
+  );
+  let isActive: boolean;
+  const [balanceList, setBalanceList] = useState<any>();
+  const { Moralis, isWeb3Enabled, isAuthenticated, account } = useMoralis();
   const ethers = Moralis.web3Library;
   const provider = new ethers.providers.JsonRpcProvider(nodeUrl);
   const signer = provider.getSigner(account!);
-  console.log('provider', provider);
-  console.log('signer', signer);
   let contract: any;
   if (isWeb3Enabled) {
     contract = new ethers.Contract(
@@ -41,13 +40,11 @@ function balances() {
     return tokens;
   };
   const getBalanceList = async (account: any, tokens: any) => {
-    const balanceList: BalanceList = [
+    const balanceList = [
       {
-        token: {
-          ticker: 'TBNB',
-          tokenAddress: undefined,
-          bytes32: ethers.utils.formatBytes32String('TBNB'),
-        },
+        ticker: 'TBNB',
+        tokenAddress: undefined,
+        bytes32: ethers.utils.formatBytes32String('TBNB'),
         balance: ethers.utils.formatEther(
           (
             await contract.balances(
@@ -63,36 +60,99 @@ function balances() {
         await contract.balances(account, token.bytes32)
       ).toString();
       const balanceObj = {
-        token,
+        ...token,
         balance,
       };
       balanceList.push(balanceObj);
-      console.log(balanceList);
+      if (isActive) setBalanceList(balanceList);
     });
-    return balanceList;
   };
 
   useEffect(() => {
-    let balanceList;
+    isActive = true;
     async function init() {
       if (isWeb3Enabled && account && isAuthenticated) {
         try {
           const tokens = await getTokens();
-          balanceList = getBalanceList(account, tokens);
+          await getBalanceList(account, tokens);
         } catch (e) {
           console.log(e);
         }
       }
     }
     init();
-    setBalanceList(balanceList);
+    return () => {
+      isActive = false;
+    };
   }, [isWeb3Enabled, isAuthenticated]);
-  console.log('balances ', balanceList);
+  const balanceItems = balanceList?.map((balance: any) => {
+    return (
+      <div
+        className={`flex justify-around p-2 m-2 rounded-lg transition duration-300 cursor-pointer ${
+          selected === balance?.ticker ? isSelected : `bg-slate-400`
+        } `}
+        key={balance?.ticker}
+        onClick={() => setSelected(balance?.ticker)}
+      >
+        <div>{balance?.ticker}</div>
+        <div>{balance?.balance}</div>
+        <input
+          id={balance?.ticker}
+          type="number"
+          onClick={(e) => {
+            amount.set(balance?.ticker, e.currentTarget.valueAsNumber);
+          }}
+          min={0}
+          placeholder="00"
+          onChange={(e) => {
+            amount.set(balance?.ticker, e.target.valueAsNumber);
+          }}
+          className="w-[20%] rounded-lg appearance-none text-black"
+        />
+      </div>
+    );
+  });
 
+  const operation = async (operation: string) => {
+    if (amount.size === 0) {
+      return alert('error amount');
+    }
+    const selectedAmount = amount.get(selected!);
+    if (Number.isNaN(selectedAmount) || selectedAmount === 0) {
+      return alert('error value');
+    }
+    balanceList.map((balance: any) => {
+      if (operation === DIRECTION.WITHDRAW) {
+        if (
+          balance?.ticker === selected &&
+          balance?.balance < selectedAmount!
+        ) {
+          return alert('error on withdraw');
+        }
+      }
+    });
+  };
   return (
-    <div className="flex justify-center min-h-[93vh] items-center">
-      <div className="flex bg-slate-700 rounded-2xl min-h-[90vh] w-[90%]">
-        <div>balances</div>
+    <div className="flex min-h-[93vh] max-g-[93vh] p-6 border-b-2 border-slate-900 justify-center items-center">
+      <div className="bg-slate-700 rounded-b-2xl min-h-[80vh] max-h-[80vh] min-w-[50vw] container overflow-x-hidden overflow-y-auto border-b-8 border-slate-700 items-center justify-center rounded-t-lg">
+        <div className="container flex rounded-t-lg bg-slate-700">
+          <button
+            type="button"
+            onClick={() => operation(DIRECTION.DEPOSIT)}
+            className="w-full transition duration-300 rounded-lg border-slate-900 hover:bg-slate-400 hover:text-white"
+          >
+            Deposit
+          </button>
+          <button
+            type="button"
+            onClick={() => operation(DIRECTION.WITHDRAW)}
+            className="w-full transition duration-300 rounded-lg border-slate-900 hover:bg-slate-400 hover:text-white"
+          >
+            Withdraw
+          </button>
+        </div>
+
+        {balanceItems}
       </div>
     </div>
   );

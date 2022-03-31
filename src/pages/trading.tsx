@@ -156,7 +156,6 @@ function trading() {
     //   getBalances(account, tokens[0]);
     // }
     return () => {
-      console.log('cancel');
       isActive = false;
     };
   }, [isWeb3Enabled, isAuthenticated]);

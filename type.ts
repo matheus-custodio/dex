@@ -5,6 +5,7 @@ export type Token = [
     ticker: string;
     tokenAddress: string | undefined;
     bytes32: BytesLike;
+    balance?: undefined;
   },
 ];
 
@@ -23,10 +24,3 @@ export type Asset = {
   withdrawToken: Function;
   user: AccountType | undefined;
 };
-
-export type BalanceList = [
-  {
-    token: any;
-    balance: string | number;
-  },
-];

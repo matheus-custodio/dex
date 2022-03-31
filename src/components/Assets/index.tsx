@@ -5,13 +5,6 @@ const DIRECTION = {
   DEPOSIT: 'DEPOSIT',
 };
 function Assets({ isActive, depositToken, withdrawToken, user }: Asset) {
-  // const { isAuthenticated } = useMoralis();
-  // if (!isAuthenticated && !isActive) {
-  //   return (
-  //     <>
-  //       <Account />
-  //     </>
-  //   );
   if (!isActive) {
     return <div>Loading...</div>;
   }
