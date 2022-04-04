@@ -9616,10 +9616,10 @@ modern-normalize@^1.1.0:
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
-moralis@^1.5.7:
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/moralis/-/moralis-1.5.7.tgz#bd10f7127873f91a9474e9504af9042de9b636e8"
-  integrity sha512-ORjNMAXt8FqolIt5uaskB0CtC2YXPRarvkfM6zNIUCHvfpSFXlzqhDNqFpp8KQ91aKABLIMHldmJvaWBVQOv8g==
+moralis@^1.5.8:
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/moralis/-/moralis-1.5.8.tgz#5bf0bd8b4bba6964ce29f847f63ef255733a6486"
+  integrity sha512-fShSFaSphFzXH1yRk+vSxO6QBfgL4h33l0Vl+a401PquqWeFbxDqnkNPxKkdvMEFANYp3eLNPto4Zb684wohcQ==
   dependencies:
     "@babel/runtime" "7.16.7"
     "@babel/runtime-corejs3" "7.16.8"

@@ -88,17 +88,17 @@ function balances() {
   const balanceItems = balanceList?.map((balance: any) => {
     return (
       <div
-        className={`flex justify-around p-2 m-2 rounded-lg transition duration-300 cursor-pointer ${
+        className={`grid grid-cols-3 p-2 text-center m-2 rounded-lg transition duration-300 cursor-pointer gap-6 justify-center ${
           selected === balance?.ticker ? isSelected : `bg-slate-400`
         } `}
         key={balance?.ticker}
         onClick={() => setSelected(balance?.ticker)}
       >
-        <div>{balance?.ticker}</div>
-        <div>{balance?.balance}</div>
+        <div className="col-span-1 ">{balance?.ticker}</div>
+        <div className="col-span-1">{balance?.balance}</div>
         <input
           id={balance?.ticker}
-          type="number"
+          type="text"
           onClick={(e) => {
             amount.set(balance?.ticker, e.currentTarget.valueAsNumber);
           }}
@@ -107,7 +107,7 @@ function balances() {
           onChange={(e) => {
             amount.set(balance?.ticker, e.target.valueAsNumber);
           }}
-          className="w-[20%] rounded-lg appearance-none text-black"
+          className="w-[100%] rounded-lg appearance-none text-black col-span-1 placeholder:text-right text-right"
         />
       </div>
     );
@@ -133,26 +133,32 @@ function balances() {
     });
   };
   return (
-    <div className="flex min-h-[93vh] max-g-[93vh] p-6 border-b-2 border-slate-900 justify-center items-center">
-      <div className="bg-slate-700 rounded-b-2xl min-h-[80vh] max-h-[80vh] min-w-[50vw] container overflow-x-hidden overflow-y-auto border-b-8 border-slate-700 items-center justify-center rounded-t-lg">
-        <div className="container flex rounded-t-lg bg-slate-700">
+    <div className="flex min-h-[93vh] max-g-[93vh] p-6 border-b-2 border-slate-900 items-center justify-center">
+      <div className="flex-col ">
+        <div className="flex rounded-t-lg bg-slate-700 min-w-[50vw] container border-b-2 border-slate-400">
           <button
             type="button"
             onClick={() => operation(DIRECTION.DEPOSIT)}
-            className="w-full transition duration-300 rounded-lg border-slate-900 hover:bg-slate-400 hover:text-white"
+            className="w-full transition duration-300 rounded-t-lg border-slate-900 hover:bg-slate-400 hover:text-white"
           >
             Deposit
           </button>
           <button
             type="button"
             onClick={() => operation(DIRECTION.WITHDRAW)}
-            className="w-full transition duration-300 rounded-lg border-slate-900 hover:bg-slate-400 hover:text-white"
+            className="w-full transition duration-300 rounded-t-lg border-slate-900 hover:bg-slate-400 hover:text-white"
           >
             Withdraw
           </button>
         </div>
-
-        {balanceItems}
+        <div className="grid grid-cols-3 bg-slate-700 min-w-[50vw] container text-center gap-6 text-white cursor-default">
+          <div className="col-span-1">Token</div>
+          <div className="col-span-1">Balance</div>
+          <div className="col-span-1">Amount</div>
+        </div>
+        <div className="bg-slate-700 rounded-b-2xl min-h-[80vh] max-h-[80vh] min-w-[50vw] container overflow-x-hidden overflow-y-auto border-b-8 border-slate-700">
+          {balanceItems}
+        </div>
       </div>
     </div>
   );
