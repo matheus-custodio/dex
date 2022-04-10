@@ -14,7 +14,7 @@ function trading() {
     BUY: 0,
     SELL: 1,
   };
-  const [user, setUser] = useState<AccountType | any>();
+  const [user, setUser] = useState<AccountType>();
   const [orders, setOrders] = useState();
   const [tokens, setTokens] = useState<Token | undefined>();
   const {
@@ -189,11 +189,11 @@ function trading() {
           <div className="col-span-12 row-span-2 p-4 text-base text-center border-2 border-slate-800 lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-700">
             <Graph />
           </div>
-          <div className="col-span-12 row-span-2 p-4 text-base text-center border-2 border-slate-800 lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-700">
-            <OrderBook />
+          <div className="col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-700">
+            <OrderBook isActive={isUser} user={user} />
           </div>
-          <div className="col-span-12 row-span-3 text-base text-center border-2 border-slate-800 lg:col-span-3 rounded-2xl md:col-span-8">
-            <div className="row-span-2 min-h-[50%] bg-slate-700 rounded-2xl">
+          <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl md:col-span-8">
+            <div className="row-span-2 min-h-[460px] border-2 bg-slate-700 rounded-2xl border-slate-800 max-h-content">
               <Assets
                 isActive={isUser}
                 depositToken={depositToken}

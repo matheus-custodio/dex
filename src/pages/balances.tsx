@@ -98,7 +98,7 @@ function balances() {
         <div className="col-span-1">{balance?.balance}</div>
         <input
           id={balance?.ticker}
-          type="text"
+          type="number"
           onClick={(e) => {
             amount.set(balance?.ticker, e.currentTarget.valueAsNumber);
           }}

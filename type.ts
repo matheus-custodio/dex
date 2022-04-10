@@ -24,3 +24,14 @@ export type Asset = {
   withdrawToken: Function;
   user: AccountType | undefined;
 };
+
+export type OrderBook = {
+  isActive: boolean;
+  user: AccountType | undefined;
+};
+
+export interface ISkill {
+  name: string;
+  level: string;
+  price: Number;
+}
