@@ -186,13 +186,13 @@ function trading() {
     <>
       {isWeb3Enabled ? (
         <div className="grid min-h-[93vh] grid-cols-12 grid-rows-3 gap-6 p-2 m-auto">
-          <div className="col-span-12 row-span-2 p-4 text-base text-center border-2 border-slate-800 lg:col-span-6 md:col-span-8 rounded-2xl bg-slate-700">
+          <div className="col-span-12 row-span-1 p-4 text-base text-center border-2 lg:row-span-2 border-slate-800 lg:col-span-6 rounded-2xl bg-slate-700">
             <Graph />
           </div>
-          <div className="col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 md:col-span-4 rounded-2xl bg-slate-700">
+          <div className="col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 rounded-2xl bg-slate-700">
             <OrderBook isActive={isUser} user={user} />
           </div>
-          <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl md:col-span-8">
+          <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
             <div className="row-span-2 min-h-[460px] border-2 bg-slate-700 rounded-2xl border-slate-800 max-h-content">
               <Assets
                 isActive={isUser}
@@ -203,7 +203,7 @@ function trading() {
             </div>
             <Orders />
           </div>
-          <div className="col-span-12 p-4 text-base text-center border-2 border-slate-800 lg:col-span-9 md:col-span-8 rounded-2xl bg-slate-700">
+          <div className="col-span-12 p-4 text-base text-center border-2 border-slate-800 lg:col-span-9 rounded-2xl bg-slate-700">
             <History />
           </div>
         </div>
