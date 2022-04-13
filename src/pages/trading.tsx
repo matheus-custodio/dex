@@ -7,7 +7,6 @@ import Assets from '../components/Assets';
 import Graph from '../components/Graph';
 import History from '../components/History';
 import OrderBook from '../components/OrderBook';
-import Orders from '../components/Orders';
 import Selector from '../components/Selector';
 
 function trading() {
@@ -30,9 +29,7 @@ function trading() {
   } = useMoralis();
   const ethers = Moralis.web3Library;
   const provider = new ethers.providers.JsonRpcProvider(nodeUrl);
-  console.log('provider ', provider);
   const signer = provider.getSigner(account!);
-  console.log('signer ', signer);
   let isUser = typeof user != 'undefined';
   let contract: any;
   if (isWeb3Enabled) {
@@ -53,10 +50,6 @@ function trading() {
   };
   const getTokens = async () => {
     const rawTokens = await contract.getTokens();
-    console.log(
-      '🚀 ~ file: trading.tsx ~ line 56 ~ getTokens ~ rawTokens',
-      rawTokens,
-    );
     const tokens = rawTokens.map((token: any) => {
       return {
         ticker: ethers.utils.parseBytes32String(token.ticker),
@@ -64,7 +57,6 @@ function trading() {
         bytes32: token[0],
       };
     });
-    console.log('🚀 ~ file: trading.tsx ~ line 64 ~ tokens ~ tokens', tokens);
     return tokens;
   };
 
@@ -92,12 +84,12 @@ function trading() {
     };
   };
 
-  const selectToken = (token: any) => {
-    const newState: AccountType = createUser(
-      user?.address,
-      user?.balance!,
-      token,
-    );
+  const selectToken = async (token: any) => {
+    if (token.ticker === user?.selectedToken.ticker) return;
+
+    const balances = await getBalances(user?.address, token.bytes32);
+    const newState: AccountType = createUser(user?.address, balances, token);
+    console.log('newState', newState);
     setUser(newState);
   };
 
@@ -185,35 +177,33 @@ function trading() {
   //depositToken
   //withdraw
   //withdrawToken
-  console.log('user ', user);
-  console.log('tokens ', tokens);
-  console.log('orders ', orders);
   if (!isUser) {
-    return <div>Loading...</div>;
+    return <div>Loading</div>;
   }
   return (
     <>
       {isWeb3Enabled ? (
-        <div className="grid min-h-[93vh] grid-cols-12 grid-rows-3 gap-6 p-2 m-auto">
-          <div className="col-span-12 row-span-1 p-4 text-base text-center border-2 lg:row-span-2 border-slate-800 lg:col-span-6 rounded-2xl bg-slate-700">
-            <Selector user={user} tokens={tokens} selectToken={selectToken} />
-            <Graph />
-          </div>
-          <div className="col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 rounded-2xl bg-slate-700">
-            <OrderBook user={user} />
-          </div>
-          <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
-            <div className="row-span-2 min-h-[460px] border-2 bg-slate-700 rounded-2xl border-slate-800 max-h-content">
-              <Assets
-                depositToken={depositToken}
-                withdrawToken={withdrawToken}
-                user={user}
-              />
+        <div className="flex items-center">
+          <div className="grid min-h-[93vh] grid-cols-12 grid-rows-3 gap-1 p-2 w-full self-center">
+            <div className="col-span-12 row-span-1 p-4 text-base text-center border-2 border-black lg:row-span-2 lg:col-span-6 rounded-2xl bg-slate-700">
+              <Selector user={user} tokens={tokens} selectToken={selectToken} />
+              <Graph />
             </div>
-            <Orders />
-          </div>
-          <div className="col-span-12 p-4 text-base text-center border-2 border-slate-800 lg:col-span-9 rounded-2xl bg-slate-700">
-            <History />
+            <div className="min-h-full col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 rounded-2xl bg-slate-700">
+              <OrderBook user={user} />
+            </div>
+            <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
+              <div className="h-full row-span-2">
+                <Assets
+                  depositToken={depositToken}
+                  withdrawToken={withdrawToken}
+                  user={user}
+                />
+              </div>
+            </div>
+            <div className="col-span-12 p-4 text-base text-center border-2 border-black lg:col-span-9 rounded-2xl bg-slate-700">
+              <History />
+            </div>
           </div>
         </div>
       ) : null}

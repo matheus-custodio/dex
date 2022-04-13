@@ -10,6 +10,7 @@ const type = {
   SELL: 1,
 };
 function Assets({ depositToken, withdrawToken, user }: Asset) {
+  console.log('user ', user);
   const [getType, setType] = useState(type.BUY);
   const [direction, setDirection] = useState(DIRECTION.LIMIT);
   const [amount, setAmount] = useState(0);
@@ -29,12 +30,9 @@ function Assets({ depositToken, withdrawToken, user }: Asset) {
       withdrawToken(amount, user!.selectedToken.bytes32);
     }
   };
-  console.log('getType ', getType);
-  console.log('direction ', direction);
-
   return (
     <form id="transfer" onSubmit={(e) => onSubmit(e)}>
-      <div className="grid items-center grid-cols-2 grid-rows-6 gap-2 p-4 text-white">
+      <div className="grid items-center grid-cols-2 grid-rows-6 gap-2 px-4 text-white border-2 border-black bg-slate-700 rounded-2xl">
         <div className="flex justify-center col-span-2">
           <div className="flex bg-slate-400 w-[80%] rounded-lg border-2 border-slate-400 my-2">
             <button
