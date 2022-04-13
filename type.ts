@@ -19,15 +19,19 @@ export type AccountType = {
 };
 
 export type Asset = {
-  isActive: boolean;
   depositToken: Function;
   withdrawToken: Function;
   user: AccountType | undefined;
 };
 
 export type OrderBook = {
-  isActive: boolean;
   user: AccountType | undefined;
+};
+
+export type Select = {
+  user: AccountType | undefined;
+  tokens: Token | undefined;
+  selectToken: Function;
 };
 
 export interface ISkill {

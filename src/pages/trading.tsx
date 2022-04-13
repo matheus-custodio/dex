@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
-import { contractAddress, nodeUrl } from '../../config';
+import { contractAddress, nativeToken, nodeUrl } from '../../config';
 import { AccountType, Token } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 import Assets from '../components/Assets';
@@ -8,6 +8,7 @@ import Graph from '../components/Graph';
 import History from '../components/History';
 import OrderBook from '../components/OrderBook';
 import Orders from '../components/Orders';
+import Selector from '../components/Selector';
 
 function trading() {
   const SIDE = {
@@ -52,6 +53,10 @@ function trading() {
   };
   const getTokens = async () => {
     const rawTokens = await contract.getTokens();
+    console.log(
+      '🚀 ~ file: trading.tsx ~ line 56 ~ getTokens ~ rawTokens',
+      rawTokens,
+    );
     const tokens = rawTokens.map((token: any) => {
       return {
         ticker: ethers.utils.parseBytes32String(token.ticker),
@@ -59,6 +64,7 @@ function trading() {
         bytes32: token[0],
       };
     });
+    console.log('🚀 ~ file: trading.tsx ~ line 64 ~ tokens ~ tokens', tokens);
     return tokens;
   };
 
@@ -75,7 +81,7 @@ function trading() {
       (
         await contract.balances(
           account,
-          ethers.utils.formatBytes32String('TBNB'),
+          ethers.utils.formatBytes32String(nativeToken),
         )
       ).toString(),
       (await contract.balances(account, bytes32)).toString(),
@@ -182,20 +188,23 @@ function trading() {
   console.log('user ', user);
   console.log('tokens ', tokens);
   console.log('orders ', orders);
+  if (!isUser) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       {isWeb3Enabled ? (
         <div className="grid min-h-[93vh] grid-cols-12 grid-rows-3 gap-6 p-2 m-auto">
           <div className="col-span-12 row-span-1 p-4 text-base text-center border-2 lg:row-span-2 border-slate-800 lg:col-span-6 rounded-2xl bg-slate-700">
+            <Selector user={user} tokens={tokens} selectToken={selectToken} />
             <Graph />
           </div>
           <div className="col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 rounded-2xl bg-slate-700">
-            <OrderBook isActive={isUser} user={user} />
+            <OrderBook user={user} />
           </div>
           <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
             <div className="row-span-2 min-h-[460px] border-2 bg-slate-700 rounded-2xl border-slate-800 max-h-content">
               <Assets
-                isActive={isUser}
                 depositToken={depositToken}
                 withdrawToken={withdrawToken}
                 user={user}

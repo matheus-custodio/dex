@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
-import { contractAddress, nodeUrl } from '../../config';
+import { contractAddress, nativeToken, nodeUrl } from '../../config';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 const DIRECTION = {
   WITHDRAW: 'WITHDRAW',
@@ -42,21 +42,21 @@ function balances() {
   const getBalanceList = async (account: any, tokens: any) => {
     const balanceList = [
       {
-        ticker: 'TBNB',
+        ticker: nativeToken,
         tokenAddress: undefined,
-        bytes32: ethers.utils.formatBytes32String('TBNB'),
+        bytes32: ethers.utils.formatBytes32String(nativeToken),
         balance: ethers.utils.formatEther(
           (
             await contract.balances(
               account,
-              ethers.utils.formatBytes32String('TBNB'),
+              ethers.utils.formatBytes32String(nativeToken),
             )
           ).toString(),
         ),
       },
     ];
     tokens.map(async (token: any) => {
-      const balance = (
+      const balance = await (
         await contract.balances(account, token.bytes32)
       ).toString();
       const balanceObj = {
@@ -64,6 +64,7 @@ function balances() {
         balance,
       };
       balanceList.push(balanceObj);
+
       if (isActive) setBalanceList(balanceList);
     });
   };
@@ -132,6 +133,7 @@ function balances() {
       }
     });
   };
+  console.log('balanceList ', balanceList);
   return (
     <div className="flex min-h-[93vh] max-g-[93vh] p-6 border-b-2 border-slate-900 items-center justify-center">
       <div className="flex-col ">

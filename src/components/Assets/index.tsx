@@ -9,10 +9,7 @@ const type = {
   BUY: 0,
   SELL: 1,
 };
-function Assets({ isActive, depositToken, withdrawToken, user }: Asset) {
-  if (!isActive) {
-    return <div className="min-h-[50%]">Loading...</div>;
-  }
+function Assets({ depositToken, withdrawToken, user }: Asset) {
   const [getType, setType] = useState(type.BUY);
   const [direction, setDirection] = useState(DIRECTION.LIMIT);
   const [amount, setAmount] = useState(0);
