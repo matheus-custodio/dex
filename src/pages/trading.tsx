@@ -8,6 +8,7 @@ import Graph from '../components/Graph';
 import History from '../components/History';
 import OrderBook from '../components/OrderBook';
 import Selector from '../components/Selector';
+import Trades from '../components/Trades';
 
 function trading() {
   const SIDE = {
@@ -194,7 +195,7 @@ function trading() {
             </div>
             <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
               <div className="flex h-full">
-                <div className="grid w-full grid-rows-2">
+                <div className="grid w-full grid-rows-2 gap-1">
                   <div className="row-span-1">
                     <Assets
                       depositToken={depositToken}
@@ -202,7 +203,9 @@ function trading() {
                       user={user}
                     />
                   </div>
-                  <div className="row-span-1">test</div>
+                  <div className="row-span-1">
+                    <Trades user={user} />
+                  </div>
                 </div>
               </div>
             </div>

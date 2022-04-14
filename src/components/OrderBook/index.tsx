@@ -12,7 +12,7 @@ function OrderBook({ user }: OrderBook) {
             <p>Amount{'(' + nativeToken + ')'}</p>
             <p>Sum{'(' + nativeToken + ')'}</p>
           </div>
-          <div className="min-h-[26vh] max-h-[27vh] overflow-auto 2xl h-fit">
+          <div className="min-h-[26vh] max-h-[27vh] overflow-auto h-fit">
             <div className="overflow-auto">
               {TradeList.map((trade: any) => {
                 return (
@@ -32,7 +32,7 @@ function OrderBook({ user }: OrderBook) {
             <p>Amount{'(' + nativeToken + ')'}</p>
             <p>Sum{'(' + nativeToken + ')'}</p>
           </div>
-          <div className="min-h-[26vh] max-h-[27vh] overflow-auto 2xl h-fit">
+          <div className="min-h-[26vh] max-h-[27vh] overflow-auto h-fit">
             <div className="overflow-auto">
               {TradeList.map((trade: any) => {
                 return (
