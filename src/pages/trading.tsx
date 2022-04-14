@@ -193,12 +193,17 @@ function trading() {
               <OrderBook user={user} />
             </div>
             <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
-              <div className="h-full row-span-2">
-                <Assets
-                  depositToken={depositToken}
-                  withdrawToken={withdrawToken}
-                  user={user}
-                />
+              <div className="flex h-full">
+                <div className="grid w-full grid-rows-2">
+                  <div className="row-span-1">
+                    <Assets
+                      depositToken={depositToken}
+                      withdrawToken={withdrawToken}
+                      user={user}
+                    />
+                  </div>
+                  <div className="row-span-1">test</div>
+                </div>
               </div>
             </div>
             <div className="col-span-12 p-4 text-base text-center border-2 border-black lg:col-span-9 rounded-2xl bg-slate-700">
