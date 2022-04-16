@@ -150,34 +150,14 @@ function trading() {
     isUser = typeof user != 'undefined';
     init();
 
-    // if (isAuthenticated && !isUser) {
-    //   console.log('account, tokens[0] ', account, tokens[0]);
-    //   getBalances(account, tokens[0]);
-    // }
     return () => {
       isActive = false;
     };
   }, [isWeb3Enabled, isAuthenticated]);
-  //read -->
-  //getOrderBook - OK
-  //getTokens - OK
-  //NewTrade event
 
-  //TokenPage -->
-  //getBalances - OK
+  //fix change account flux
+  // fix balance page rendering
 
-  //write -->
-  //admin -->
-  //addToken
-
-  //createLimitOrder
-  //createMarketOrder
-
-  //TokenPage -->
-  //deposit
-  //depositToken
-  //withdraw
-  //withdrawToken
   if (!isUser) {
     return <div>Loading</div>;
   }

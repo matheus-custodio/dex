@@ -15,11 +15,11 @@ function Assets({ depositToken, withdrawToken, user }: Asset) {
   const [direction, setDirection] = useState(DIRECTION.LIMIT);
   const [amount, setAmount] = useState(0);
   const [price, setPrice] = useState(0);
-  const selected = 'w-full text-white bg-slate-900 rounded-md p-1 font-bold';
-  const notSelected = 'w-full bg-slate-600 rounded-md p-1 text-black';
+  const selected = 'w-full text-white bg-slate-900 rounded-md py-2 font-bold';
+  const notSelected = 'w-full bg-slate-600 rounded-md py-2 text-black';
   const selectedDirection =
-    'rounded-3xl m-2 w-full bg-slate-400 text-black font-bold';
-  const notSelectedDirection = 'm-2 w-full';
+    'rounded-3xl  w-full bg-slate-400 text-black font-bold p-2';
+  const notSelectedDirection = ' w-full p-2';
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -37,9 +37,9 @@ function Assets({ depositToken, withdrawToken, user }: Asset) {
         onSubmit={(e) => onSubmit(e)}
         className="flex w-full h-full"
       >
-        <div className="grid w-full grid-cols-2 grid-rows-6 gap-2 px-4 text-white">
+        <div className="grid items-center w-full grid-cols-2 grid-rows-6 gap-2 px-4 text-white">
           <div className="flex justify-center col-span-2">
-            <div className="flex bg-slate-400 w-[80%] rounded-lg border-2 border-slate-400 my-2">
+            <div className="flex bg-slate-400 w-[80%] rounded-lg border-2 border-slate-400 ">
               <button
                 type="button"
                 onClick={() => setType(type.BUY)}
