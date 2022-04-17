@@ -1,26 +1,29 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { useState } from 'react';
 function History() {
+  const [tabIndex, setTabIndex] = useState(0);
+  const selected = 'border-b-2 text-white border-slate-400';
+  const notSelected =
+    'border-b-2 hover:border-white border-slate-700 hover:text-slate-400 ';
   return (
-    <div className="flex gap-6 px-2 text-lg text-white">
-      <Tabs isLazy>
+    <div className="flex px-2 text-lg text-white">
+      <Tabs
+        isLazy
+        variant={'unstyled'}
+        onChange={(index) => setTabIndex(index)}
+      >
         <TabList>
-          <Tab>
-            <a className="cursor-pointer hover:text-slate-400 hover:border-b-2">
-              Open Orders
-            </a>
+          <Tab className={tabIndex === 0 ? selected : notSelected}>
+            Open Orders
           </Tab>
-          <Tab>
-            <a className="cursor-pointer hover:text-slate-400 hover:border-b-2">
-              Order History
-            </a>
+          <Tab className={tabIndex === 1 ? selected : notSelected}>
+            Order History
           </Tab>
         </TabList>
         <TabPanels>
-          {/* initially mounted */}
           <TabPanel>
             <p>one!</p>
           </TabPanel>
-          {/* initially not mounted */}
           <TabPanel>
             <p>two!</p>
           </TabPanel>
