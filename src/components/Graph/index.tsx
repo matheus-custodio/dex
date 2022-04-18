@@ -1,5 +1,5 @@
 function Graph() {
-  return <div className="flex">Graph</div>;
+  return <div>Graph</div>;
 }
 
 export default Graph;
