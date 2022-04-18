@@ -20,7 +20,7 @@ function History() {
             Order History
           </Tab>
         </TabList>
-        <TabPanels>
+        <TabPanels className="flex h-full">
           <TabPanel>
             <p>one!</p>
           </TabPanel>
