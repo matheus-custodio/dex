@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import { contractAddress, nativeToken, nodeUrl } from '../../config';
-import { AccountType, Token } from '../../type';
+import { AccountType, Orders, Token } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 import Assets from '../components/Assets';
 import Graph from '../components/Graph';
@@ -16,7 +16,7 @@ function trading() {
     SELL: 1,
   };
   const [user, setUser] = useState<AccountType>();
-  const [orders, setOrders] = useState();
+  const [orders, setOrders] = useState<Orders>();
   const [tokens, setTokens] = useState<Token | undefined>();
   const {
     Moralis,
@@ -25,8 +25,6 @@ function trading() {
     isWeb3EnableLoading,
     enableWeb3,
     account,
-    logout,
-    authenticate,
   } = useMoralis();
   const ethers = Moralis.web3Library;
   const provider = new ethers.providers.JsonRpcProvider(nodeUrl);
@@ -66,6 +64,10 @@ function trading() {
       contract.GetOrderBook(token.bytes32, SIDE.BUY),
       contract.GetOrderBook(token.bytes32, SIDE.SELL),
     ]);
+    console.log(
+      '🚀 ~ file: trading.tsx ~ line 67 ~ getOrders ~ orders',
+      orders,
+    );
     return { BUY: orders[0], SELL: orders[1] };
   };
 
@@ -90,7 +92,6 @@ function trading() {
 
     const balances = await getBalances(user?.address, token.bytes32);
     const newState: AccountType = createUser(user?.address, balances, token);
-    console.log('newState', newState);
     setUser(newState);
   };
 
@@ -129,6 +130,7 @@ function trading() {
         try {
           tokens = await getTokens();
           orders = await getOrders(isUser ? user?.selectedToken : tokens[0]);
+
           if (account != null && !isUser && isAuthenticated) {
             balances = await getBalances(account, tokens[0].bytes32);
             user = {
@@ -155,12 +157,26 @@ function trading() {
     };
   }, [isWeb3Enabled, isAuthenticated]);
 
+  useEffect(() => {
+    if (isUser) {
+      const ordersList = getOrders(user?.selectedToken);
+      Promise.resolve(ordersList).then((response: any) => {
+        console.log('response ', response);
+        setOrders(response);
+      });
+    }
+  }, [user?.selectedToken]);
+
   //fix change account flux
   // fix balance page rendering
 
   if (!isUser) {
     return <div>Loading</div>;
   }
+  //TK2  0x544b320000000000000000000000000000000000000000000000000000000000
+  //MTK  0x4d544b0000000000000000000000000000000000000000000000000000000000
+  console.log('orders ', orders);
+
   return (
     <>
       {isWeb3Enabled ? (

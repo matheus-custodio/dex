@@ -34,6 +34,11 @@ export type Select = {
   selectToken: Function;
 };
 
+export type Orders = {
+  BUY: {};
+  SELL: {};
+};
+
 export interface ISkill {
   name: string;
   level: string;

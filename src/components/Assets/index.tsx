@@ -10,7 +10,6 @@ const type = {
   SELL: 1,
 };
 function Assets({ depositToken, withdrawToken, user }: Asset) {
-  console.log('user ', user);
   const [getType, setType] = useState(type.BUY);
   const [direction, setDirection] = useState(DIRECTION.LIMIT);
   const [amount, setAmount] = useState(0);
