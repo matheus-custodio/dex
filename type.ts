@@ -39,6 +39,13 @@ export type Orders = {
   SELL: {};
 };
 
+export type OrderItem = {
+  amount: string;
+  filled: string;
+  price: string;
+  trader: string;
+};
+
 export interface ISkill {
   name: string;
   level: string;

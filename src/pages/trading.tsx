@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import { contractAddress, nativeToken, nodeUrl } from '../../config';
-import { AccountType, Orders, Token } from '../../type';
+import { AccountType, OrderItem, Orders, Token } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 import Assets from '../components/Assets';
 import Graph from '../components/Graph';
@@ -38,6 +38,19 @@ function trading() {
       signer,
     );
   }
+  function getOrderList(rawOrderList: any) {
+    let orderList: OrderItem[] = [];
+    rawOrderList.map((order: any) => {
+      const formatted: OrderItem = {
+        amount: order.amount.toString(),
+        filled: order.filled.toString(),
+        price: order.price.toString(),
+        trader: order.trader,
+      };
+      orderList.push(formatted);
+    });
+    return orderList;
+  }
   //methods
   const createUser = (address: any, balance: any, token: Token) => {
     const newUser = {
@@ -64,11 +77,11 @@ function trading() {
       contract.GetOrderBook(token.bytes32, SIDE.BUY),
       contract.GetOrderBook(token.bytes32, SIDE.SELL),
     ]);
-    console.log(
-      '🚀 ~ file: trading.tsx ~ line 67 ~ getOrders ~ orders',
-      orders,
-    );
-    return { BUY: orders[0], SELL: orders[1] };
+    const OrderList = {
+      BUY: getOrderList(orders[0]),
+      SELL: getOrderList(orders[1]),
+    };
+    return OrderList;
   };
 
   const getBalances = async (account: any, bytes32: any) => {
