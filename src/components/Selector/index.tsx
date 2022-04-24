@@ -36,11 +36,12 @@ function Selector({ user, tokens, selectToken }: Select) {
     selectToken(token);
     onClose();
   }
-  const tokenList = tokens?.map((token: any) => {
+  const tokenList = tokens?.map((token: any, index) => {
     return (
       <div
         className="grid grid-cols-2 pt-1 rounded-lg cursor-pointer justify-evenly hover:bg-slate-400 hover:text-black"
         onClick={() => select(token)}
+        key={index}
       >
         <a className="col-span-1">{token.ticker}</a>
         <a className="col-span-1">{pair(token.ticker)}</a>

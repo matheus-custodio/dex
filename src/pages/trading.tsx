@@ -211,13 +211,13 @@ function trading() {
                     />
                   </div>
                   <div className="row-span-1">
-                    <Trades tradeList={trades} />
+                    <Trades user={user} />
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-span-12 p-4 text-base text-center border-2 border-black lg:col-span-9 rounded-2xl bg-slate-700">
-              <History />
+              <History orders={orders} user={user} />
             </div>
           </div>
         </div>
