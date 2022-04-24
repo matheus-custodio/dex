@@ -133,7 +133,6 @@ function balances() {
       }
     });
   };
-  console.log('balanceList ', balanceList);
   return (
     <div className="flex min-h-[93vh] max-g-[93vh] p-6 border-b-2 border-slate-900 items-center justify-center">
       <div className="flex-col ">

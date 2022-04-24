@@ -39,7 +39,7 @@ function trading() {
       signer,
     );
   }
-  function getOrderList(rawOrderList: any) {
+  const getOrderList = (rawOrderList: any) => {
     let orderList: Array<Order> = [];
     rawOrderList.map((order: any) => {
       const formatted: Order = {
@@ -51,7 +51,7 @@ function trading() {
       orderList.push(formatted);
     });
     return orderList;
-  }
+  };
 
   const createUser = (address: any, balance: any, token: Token) => {
     const newUser = {
@@ -131,16 +131,13 @@ function trading() {
     if (!isWeb3Enabled && !isWeb3EnableLoading) {
       enableWeb3();
     }
-  }, [isAuthenticated, isWeb3Enabled]);
-
-  useEffect(() => {
     let isActive = true;
     let tokens: any;
     let orders: any;
     let balances: any;
     let user: any;
     async function init() {
-      if (isWeb3Enabled) {
+      if (isWeb3Enabled && !isWeb3EnableLoading) {
         try {
           tokens = await getTokens();
           orders = await getOrders(isUser ? user?.selectedToken : tokens[0]);
@@ -180,18 +177,20 @@ function trading() {
     }
   }, [user?.selectedToken]);
 
-  //fix change account flux
-  // fix balance page rendering
+  /**
+   * TODO: fix change account flux
+   * TODO: fix balance page rendering
+   * * TK2  0x544b320000000000000000000000000000000000000000000000000000000000
+   * * MTK  0x4d544b0000000000000000000000000000000000000000000000000000000000
+   */
 
   if (!isUser) {
     return <div>Loading</div>;
   }
-  //TK2  0x544b320000000000000000000000000000000000000000000000000000000000
-  //MTK  0x4d544b0000000000000000000000000000000000000000000000000000000000
 
   return (
     <>
-      {isWeb3Enabled ? (
+      {isWeb3Enabled && (
         <div className="flex items-center">
           <div className="grid min-h-[93vh] grid-cols-12 grid-rows-3 gap-1 p-2 w-full self-center">
             <div className="col-span-12 row-span-1 p-4 text-base text-center border-2 border-black lg:row-span-2 lg:col-span-6 rounded-2xl bg-slate-700">
@@ -222,7 +221,7 @@ function trading() {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 }
