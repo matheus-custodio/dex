@@ -1,4 +1,4 @@
-import { BytesLike } from 'ethers/';
+import { BytesLike } from 'ethers/lib/ethers';
 
 export type Token = [
   {
@@ -46,3 +46,5 @@ export type Order = {
   price: string;
   trader: string;
 };
+
+export type TradeList = {};

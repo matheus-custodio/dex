@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import { contractAddress, nativeToken, nodeUrl } from '../../config';
-import { AccountType, Order, Orders, Token } from '../../type';
+import { AccountType, Order, Orders, Token, TradeList } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 import Assets from '../components/Assets';
 import Graph from '../components/Graph';
 import History from '../components/History';
 import OrderBook from '../components/OrderBook';
 import Selector from '../components/Selector';
+import Trades from '../components/Trades';
 
 function trading() {
   const SIDE = {
@@ -16,6 +17,7 @@ function trading() {
   };
   const [user, setUser] = useState<AccountType>();
   const [orders, setOrders] = useState<Orders>();
+  const [trades, setTrades] = useState<TradeList>();
   const [tokens, setTokens] = useState<Token | undefined>();
   const {
     Moralis,
@@ -50,7 +52,7 @@ function trading() {
     });
     return orderList;
   }
-  //methods
+
   const createUser = (address: any, balance: any, token: Token) => {
     const newUser = {
       address: address,
@@ -210,7 +212,7 @@ function trading() {
                     />
                   </div>
                   <div className="row-span-1">
-                    {/* <Trades user={user} /> */}
+                    <Trades tradeList={trades} />
                   </div>
                 </div>
               </div>
