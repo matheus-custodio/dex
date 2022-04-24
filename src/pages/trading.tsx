@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 import { contractAddress, nativeToken, nodeUrl } from '../../config';
-import { AccountType, OrderItem, Orders, Token } from '../../type';
+import { AccountType, Order, Orders, Token } from '../../type';
 import ABI from '../artifacts/contracts/Dex.sol/Dex.json';
 import Assets from '../components/Assets';
 import Graph from '../components/Graph';
 import History from '../components/History';
 import OrderBook from '../components/OrderBook';
 import Selector from '../components/Selector';
-import Trades from '../components/Trades';
 
 function trading() {
   const SIDE = {
@@ -39,9 +38,9 @@ function trading() {
     );
   }
   function getOrderList(rawOrderList: any) {
-    let orderList: OrderItem[] = [];
+    let orderList: Array<Order> = [];
     rawOrderList.map((order: any) => {
-      const formatted: OrderItem = {
+      const formatted: Order = {
         amount: order.amount.toString(),
         filled: order.filled.toString(),
         price: order.price.toString(),
@@ -174,7 +173,6 @@ function trading() {
     if (isUser) {
       const ordersList = getOrders(user?.selectedToken);
       Promise.resolve(ordersList).then((response: any) => {
-        console.log('response ', response);
         setOrders(response);
       });
     }
@@ -188,7 +186,6 @@ function trading() {
   }
   //TK2  0x544b320000000000000000000000000000000000000000000000000000000000
   //MTK  0x4d544b0000000000000000000000000000000000000000000000000000000000
-  console.log('orders ', orders);
 
   return (
     <>
@@ -200,7 +197,7 @@ function trading() {
               <Graph />
             </div>
             <div className="min-h-full col-span-12 row-span-2 text-base text-center border-2 border-black lg:col-span-3 rounded-2xl bg-slate-700">
-              <OrderBook user={user} />
+              <OrderBook user={user} orders={orders} />
             </div>
             <div className="col-span-12 row-span-3 text-base text-center lg:col-span-3 rounded-2xl ">
               <div className="flex h-full">
@@ -213,7 +210,7 @@ function trading() {
                     />
                   </div>
                   <div className="row-span-1">
-                    <Trades user={user} />
+                    {/* <Trades user={user} /> */}
                   </div>
                 </div>
               </div>

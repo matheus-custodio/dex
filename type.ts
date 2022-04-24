@@ -26,6 +26,7 @@ export type Asset = {
 
 export type OrderBook = {
   user: AccountType | undefined;
+  orders: Orders | undefined;
 };
 
 export type Select = {
@@ -35,19 +36,13 @@ export type Select = {
 };
 
 export type Orders = {
-  BUY: {};
-  SELL: {};
+  BUY: Array<Order>;
+  SELL: Array<Order>;
 };
 
-export type OrderItem = {
+export type Order = {
   amount: string;
   filled: string;
   price: string;
   trader: string;
 };
-
-export interface ISkill {
-  name: string;
-  level: string;
-  price: Number;
-}
