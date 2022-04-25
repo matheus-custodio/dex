@@ -1,7 +1,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Platform to show what I learned and developed, deployed at BSCTESTNET, currently only with trading and balances read functionality.
+Platform to show what I learned and developed, inspired by [Position Exchange](https://app.position.exchange/), deployed at BSCTESTNET, currently only with trading and balances read functionality.
 ### Built With
 * [Next.js](https://nextjs.org/)
 * [React.js](https://reactjs.org/)
@@ -12,6 +12,19 @@ Platform to show what I learned and developed, deployed at BSCTESTNET, currently
 * [Ethers.js](https://docs.ethers.io/v5/)
 * [Solidity](https://docs.soliditylang.org/en/v0.8.13/)
 * [Mocha](https://mochajs.org/)
+<!-- ROADMAP -->
+## Roadmap
+
+- [x] Boilerplate
+- [ ] Dex functionality(trading,balances)
+- [ ] ERC20/BEP20 Platform token
+- [ ] Defi functionality(farms,pools)
+- [ ] Nft with Defi(Staking of NFT for yield)
+- [ ] Multi-language Support
+    - [x] English
+    - [ ] Portuguese
+
+See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 <!-- GETTING STARTED -->
 ## Getting Started
 ### Prerequisites
@@ -38,3 +51,4 @@ Platform to show what I learned and developed, deployed at BSCTESTNET, currently
 ## Acknowledgments
 * [Read.me](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
 * [Moralis Youtube](https://www.youtube.com/c/MoralisWeb3)
+* [Position Exchange](https://app.position.exchange/)
