@@ -23,8 +23,6 @@ Platform to show what I learned and developed, inspired by [Position Exchange](h
 - [ ] Multi-language Support
     - [x] English
     - [ ] Portuguese
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 <!-- GETTING STARTED -->
 ## Getting Started
 ### Prerequisites
