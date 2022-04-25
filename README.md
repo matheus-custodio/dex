@@ -29,7 +29,7 @@ Platform to show what I learned and developed, deployed at BSCTESTNET, currently
 3. Install NPM packages
    ```sh
    npm install
-4. Create a .env file with  
+4. Create a .env file and add your credentials from step 1
    ```sh
    NEXT_PUBLIC_APP_ID=YOUR_APP_ID
    NEXT_PUBLIC_SERVER_URL=YOUR_SERVER_URL
